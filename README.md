@@ -1,1 +1,5 @@
 # FunWithSwift
+## 记录学习Swift的点滴
+
+###MyPlayground.playground 记录基础Swift语法
+###FunWithSwift.playground 记录Swift与函数式相关

@@ -1,5 +1,11 @@
 // Playground - noun: a place where people can play
 
-import UIKit
+// Functional Programming
 
-var str = "Hello, playground"
+var evens = [Int]()
+for i in 1...10 {
+    if i % 2 == 0 {
+        evens.append(i)
+    }
+}
+println(evens)

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.7" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="OI8-Ur-YYC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14D72i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="OI8-Ur-YYC">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6181.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--CafeHunter-->
@@ -13,11 +14,45 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Ko-ZI-SNi" customClass="FBLoginView">
+                                <rect key="frame" x="200" y="123" width="200" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="Af0-FB-saA"/>
+                                    <constraint firstAttribute="height" constant="50" id="g1P-sj-RFU"/>
+                                </constraints>
+                            </view>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="BTA-Cu-xUP">
+                                <rect key="frame" x="0.0" y="225" width="600" height="375"/>
+                                <connections>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="cVc-vy-aYd"/>
+                                </connections>
+                            </mapView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="BTA-Cu-xUP" secondAttribute="bottom" id="0LO-ki-bSI"/>
+                            <constraint firstAttribute="centerX" secondItem="4Ko-ZI-SNi" secondAttribute="centerX" id="0VC-sb-mrj"/>
+                            <constraint firstItem="BTA-Cu-xUP" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="4Hx-hg-t1W"/>
+                            <constraint firstAttribute="trailing" secondItem="BTA-Cu-xUP" secondAttribute="trailing" id="FrF-OH-rgY"/>
+                            <constraint firstItem="4Ko-ZI-SNi" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="137" id="L98-2L-Vtf"/>
+                            <constraint firstItem="BTA-Cu-xUP" firstAttribute="top" secondItem="4Ko-ZI-SNi" secondAttribute="bottom" constant="52" id="QGc-pC-tgV"/>
+                            <constraint firstAttribute="centerY" secondItem="4Ko-ZI-SNi" secondAttribute="centerY" constant="152.5" id="jL0-RE-M9L"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="L98-2L-Vtf"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="CafeHunter" id="owj-Fn-8WE"/>
+                    <connections>
+                        <outlet property="loginView" destination="4Ko-ZI-SNi" id="tZp-zC-co5"/>
+                        <outlet property="mapView" destination="BTA-Cu-xUP" id="yf5-XB-FCv"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>

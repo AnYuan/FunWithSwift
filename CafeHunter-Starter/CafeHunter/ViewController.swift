@@ -40,6 +40,8 @@ class ViewController: UIViewController {
     self.locationManager = CLLocationManager()
     self.locationManager.delegate = self
     
+    self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: "refresh:")
+    
   }
   
   override func viewDidAppear(animated: Bool) {
@@ -111,6 +113,17 @@ class ViewController: UIViewController {
               }
           }
       }
+    }
+    
+    func refresh(sender: UIBarButtonItem) {
+        if let location = self.lastLocation {
+            self.centerMapOnLocation(location)
+            self.fetchCafesAroundLocation(location)
+        } else {
+            let alert = UIAlertController(title: "Error", message: "No location yet!", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
 }
 

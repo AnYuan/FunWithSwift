@@ -32,12 +32,14 @@ class ViewController: UIViewController {
     
   private var locationManager: CLLocationManager!
   private var lastLocation: CLLocation?
+  private var cafes = [Cafe]()
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     self.locationManager = CLLocationManager()
     self.locationManager.delegate = self
+    
   }
   
   override func viewDidAppear(animated: Bool) {
@@ -59,14 +61,57 @@ class ViewController: UIViewController {
   }
     
   private func fetchCafesAroundLocation(location: CLLocation) {
-    if !FBSession.activeSession().isOpen {
-        let alert = UIAlertController(title: "Error", message: "Login first!", preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
-        return
+      if !FBSession.activeSession().isOpen {
+          let alert = UIAlertController(title: "Error", message: "Login first!", preferredStyle: .Alert)
+          alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+          self.presentViewController(alert, animated: true, completion: nil)
+          return
+      }
+    
+      var urlString = "https://graph.facebook.com/v2.0/search/"
+      urlString += "?access_token="
+      urlString += "\(FBSession.activeSession().accessTokenData.accessToken)"
+      urlString += "&type=place"
+      urlString += "&q=cafe"
+      urlString += "&center=\(location.coordinate.latitude),"
+      urlString += "\(location.coordinate.longitude)"
+      urlString += "&distance=\(Int(searchDistance))"
+    
+      let url = NSURL(string: urlString)!
+      println("Requesting from FB with URL: \(url)")
+      let request = NSURLRequest(URL: url)
+      NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {
+          (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+        
+          if error != nil {
+              let alert = UIAlertController(title: "Oops!", message: "An error occured", preferredStyle: .Alert)
+              alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+              self.presentViewController(alert, animated: true, completion: nil)
+              return
+          }
+        
+          var error: NSError?
+          let jsonObject: AnyObject! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(0), error: &error)
+          if let jsonObject = jsonObject as? [String:AnyObject] {
+              if error == nil {
+                  println("Data returned from FB:\n\(jsonObject)")
+                  if let data = JSONValue.fromObject(jsonObject)?["data"]?.array {
+                      var cafes: [Cafe] = []
+                      for cafeJSON in data {
+                          if let cafeJSON = cafeJSON.object {
+                            if let cafe = Cafe.fromJSON(cafeJSON) {
+                                cafes.append(cafe)
+                            }
+                          }
+                      }
+                      self.mapView.removeAnnotations(self.cafes)
+                      self.cafes = cafes
+                      self.mapView.addAnnotations(cafes)
+                  }
+              }
+          }
+      }
     }
-    //TODO
-  }
 }
 
 extension ViewController: CLLocationManagerDelegate {

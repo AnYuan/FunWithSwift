@@ -30,6 +30,41 @@ class Cafe: NSObject {
         
         super.init()
     }
+    
+    class func fromJSON(json: [String:JSONValue]) -> Cafe? {
+        let fbid = json["id"]?.string
+        let name = json["name"]?.string
+        let latitude = json["location"]?["latitude"]?.double
+        let longitude = json["location"]?["longitude"]?.double
+        
+        if fbid != nil && name != nil && latitude != nil && longitude != nil {
+            var street: String
+            if let maybeStreet = json["location"]?["street"]?.string {
+                street = maybeStreet
+            } else {
+                street = ""
+            }
+            
+            var city: String
+            if let maybeCity = json["location"]?["city"]?.string {
+                city = maybeCity
+            } else {
+                city = ""
+            }
+            
+            var zip: String
+            if let maybeZip = json["location"]?["zip"]?.string {
+                zip = maybeZip
+            } else {
+                zip = ""
+            }
+            
+            let location = CLLocationCoordinate2D(latitude: latitude!, longitude: longitude!)
+            return Cafe(fbid: fbid!, name: name!, location: location, street: street, city: city, zip: zip)
+        }
+        return nil
+    }
+
 }
 
 extension Cafe: MKAnnotation {

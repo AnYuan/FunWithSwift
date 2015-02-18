@@ -137,18 +137,37 @@ extension ViewController: CLLocationManagerDelegate {
 
 extension ViewController: MKMapViewDelegate {
     
-    func mapView(mapView: MKMapView!, didFailToLocateUserWithError error: NSError!) {
-        println(error)
-        let alert = UIAlertController(title: "Error", message: "Failed to obtain location!", preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+        if let annotation = annotation as? Cafe {
+            let identifier = "pin"
+            var view: MKPinAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView {
+                dequeuedView.annotation = annotation
+                view = dequeuedView
+            } else {
+                view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                view.canShowCallout = true
+                view.calloutOffset = CGPoint(x: -5, y: 5)
+                view.rightCalloutAccessoryView = UIButton.buttonWithType(.DetailDisclosure) as UIView
+            }
+            return view
+        }
+        return nil
+    }
+    
+    func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
+        if let viewController = self.storyboard!.instantiateViewControllerWithIdentifier("CafeView") as? CafeViewController {
+            if let cafe = view.annotation as? Cafe {
+                viewController.cafe = cafe
+                viewController.delegate = self
+                self.presentViewController(viewController, animated: true, completion: nil)
+            }
+        }
     }
     
     func mapView(mapView: MKMapView!, didUpdateUserLocation userLocation: MKUserLocation!) {
         let newLocation = userLocation.location
-        
         let distance = self.lastLocation?.distanceFromLocation(newLocation)
-        
         if distance == nil || distance! > searchDistance {
             self.lastLocation = newLocation
             self.centerMapOnLocation(newLocation)
@@ -156,5 +175,19 @@ extension ViewController: MKMapViewDelegate {
         }
     }
     
+    func mapView(mapView: MKMapView!, didFailToLocateUserWithError error: NSError!) {
+        println(error)
+        let alert = UIAlertController(title: "Error", message: "Failed to obtain location!", preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+}
 
+extension ViewController: CafeViewControllerDelegate {
+    
+    func cafeViewControllerDidFinish(viewController: CafeViewController) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
 }

@@ -58,6 +58,87 @@
             </objects>
             <point key="canvasLocation" x="529" y="677"/>
         </scene>
+        <!--Cafe View Controller-->
+        <scene sceneID="zhB-Xh-uqe">
+            <objects>
+                <viewController storyboardIdentifier="CafeView" id="qFA-bI-wYE" customClass="CafeViewController" customModule="CafeHunter" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Rmp-Hb-CKr"/>
+                        <viewControllerLayoutGuide type="bottom" id="kXQ-gJ-1Ug"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ntz-t4-3Sc">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9wq-oY-jgk">
+                                <rect key="frame" x="200" y="28" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="8qA-FY-MEB"/>
+                                    <constraint firstAttribute="height" constant="200" id="N9D-Xl-JLC"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lhb-gX-fDJ">
+                                <rect key="frame" x="287" y="531" width="34" height="30"/>
+                                <state key="normal" title="back">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="back:" destination="qFA-bI-wYE" eventType="touchUpInside" id="o3p-Wj-TUF"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NJp-ql-5u4">
+                                <rect key="frame" x="273" y="315" width="63" height="32"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5AQ-P9-iOY">
+                                <rect key="frame" x="282" y="352" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XsV-tI-fnu">
+                                <rect key="frame" x="283" y="381" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h4J-WB-6HW">
+                                <rect key="frame" x="283" y="410" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="h4J-WB-6HW" firstAttribute="centerX" secondItem="NJp-ql-5u4" secondAttribute="centerX" constant="-0.5" id="71b-9s-nJS"/>
+                            <constraint firstItem="5AQ-P9-iOY" firstAttribute="top" secondItem="NJp-ql-5u4" secondAttribute="bottom" constant="5" id="7i6-Qm-Ory"/>
+                            <constraint firstItem="5AQ-P9-iOY" firstAttribute="centerX" secondItem="NJp-ql-5u4" secondAttribute="centerX" constant="-1.5" id="LRx-Wo-NOs"/>
+                            <constraint firstItem="NJp-ql-5u4" firstAttribute="centerX" secondItem="XsV-tI-fnu" secondAttribute="centerX" constant="0.5" id="Nt5-LX-sKF"/>
+                            <constraint firstAttribute="centerY" secondItem="NJp-ql-5u4" secondAttribute="centerY" constant="-31" id="Rqg-W6-bfu"/>
+                            <constraint firstItem="h4J-WB-6HW" firstAttribute="top" secondItem="XsV-tI-fnu" secondAttribute="bottom" constant="8" id="V5R-bO-SAC"/>
+                            <constraint firstItem="XsV-tI-fnu" firstAttribute="top" secondItem="5AQ-P9-iOY" secondAttribute="bottom" constant="9" id="VL3-Z4-Kga"/>
+                            <constraint firstItem="NJp-ql-5u4" firstAttribute="centerX" secondItem="9wq-oY-jgk" secondAttribute="centerX" constant="4.5" id="czv-v7-Seh"/>
+                            <constraint firstAttribute="centerX" secondItem="9wq-oY-jgk" secondAttribute="centerX" id="hAj-8X-KUv"/>
+                            <constraint firstItem="9wq-oY-jgk" firstAttribute="top" secondItem="Rmp-Hb-CKr" secondAttribute="bottom" constant="8" id="iek-Zr-iaA"/>
+                            <constraint firstItem="kXQ-gJ-1Ug" firstAttribute="top" secondItem="Lhb-gX-fDJ" secondAttribute="bottom" constant="39" id="j1w-dh-ZEj"/>
+                            <constraint firstItem="Lhb-gX-fDJ" firstAttribute="centerX" secondItem="9wq-oY-jgk" secondAttribute="centerX" constant="4" id="lWr-tM-hQN"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="cityLabel" destination="XsV-tI-fnu" id="etv-cP-V1n"/>
+                        <outlet property="imageView" destination="9wq-oY-jgk" id="i9S-lY-BL1"/>
+                        <outlet property="nameLabel" destination="NJp-ql-5u4" id="nVs-al-SZw"/>
+                        <outlet property="streetLabel" destination="5AQ-P9-iOY" id="3lf-BY-1k7"/>
+                        <outlet property="zipLabel" destination="h4J-WB-6HW" id="fIB-vR-urx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="X5H-nN-kgn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1166" y="677"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="mRe-Nb-tQC">
             <objects>

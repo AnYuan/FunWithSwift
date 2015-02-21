@@ -5,3 +5,4 @@
 ###FunWithSwift.playground 记录Swift与函数式相关
 ###CafeHunter-Stater 是Swift and Cocoa 章节中的Demo
 ###SwiftReversi Swift vs. Objective-C Demo code
+###SHCReversiGame 是SwiftReversi 中的Objective-C 实现

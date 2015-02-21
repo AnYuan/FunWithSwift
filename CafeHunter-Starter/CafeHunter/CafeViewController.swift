@@ -8,6 +8,16 @@
 
 import Foundation
 
+
+//if you want optional, you have to declare the protocol as @objc
+//Marking the protocol as @objc enables Swift to put various runtime checks
+//in place to check for conformance to the protocol and to check that various
+//methods exist to support optional functionality.
+
+//Note: You can also limit your protocols to be implemented by classes only:
+//protocol classOnlyProtocol: class {...}
+//This means only classes may adpot the protocol. Without it, **STRUCT**s may adopt
+//the protocol, as well.
 @objc protocol CafeViewControllerDelegate {
     
     optional func cafeViewControllerDidFinish(viewController: CafeViewController)

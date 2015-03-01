@@ -41,6 +41,7 @@ class Board {
     }
     
     // a visitor, where the supplied closure is applied to each cell
+    // visitor pattern : http://en.wikipedia.org/wiki/Visitor_pattern
     func cellVisitor(fn: (BoardLocation) ->()) {
         for column in 0..<boardSize {
             for row in 0..<boardSize {

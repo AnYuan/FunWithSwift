@@ -10,4 +10,15 @@ import Foundation
 
 enum BoardCellState {
     case Empty, Black, White
+    
+    func invert() -> BoardCellState {
+        if self == Black {
+            return White
+        } else if self == White {
+            return Black
+        }
+        
+        assert(self != self, "cannot invert the empty state")
+        return Empty
+    }
 }

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class BoardSquare: UIView {
+class BoardSquare: UIView, BoardDelegate {
     private let board: ReversiBoard
     private let location: BoardLocation
     private let blackView: UIImageView
@@ -39,11 +39,19 @@ class BoardSquare: UIView {
         addSubview(whiteView)
         
         update()
+        
+        board.addDelegate(self)
     }
     
     private func update() {
         let state = board[location]
         whiteView.alpha = state == BoardCellState.White ? 1.0 : 0.0
         blackView.alpha = state == BoardCellState.Black ? 1.0 : 0.0
+    }
+    
+    func cellStateChanged(location: BoardLocation) {
+        if self.location == location {
+            update()
+        }
     }
 }

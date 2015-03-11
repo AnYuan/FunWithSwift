@@ -11,7 +11,8 @@ import Foundation
 class Board {
     private var cells: [BoardCellState]
     let boardSize = 8
-    
+    private let boardDelegates = DelegateMulticast<BoardDelegate>()
+
     init() {
         cells = Array(count: boardSize * boardSize, repeatedValue: BoardCellState.Empty)
     }
@@ -37,6 +38,7 @@ class Board {
         set {
             assert(isWithinBounds(location), "row or column index out of bounds")
             cells[location.row * boardSize + location.column] = newValue
+            boardDelegates.invokeDelegates { $0.cellStateChanged(location) }
         }
     }
     
@@ -53,6 +55,10 @@ class Board {
     
     func clearBoard() {
         cellVisitor {self[$0] = .Empty}
+    }
+    
+    func addDelegate(delegate: BoardDelegate) {
+        boardDelegates.addDelegate(delegate)
     }
 
 }

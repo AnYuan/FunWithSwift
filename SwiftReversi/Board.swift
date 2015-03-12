@@ -53,6 +53,12 @@ class Board {
         }
     }
     
+    func countMatches(fn: (BoardLocation) -> Bool) -> Int {
+        var count = 0
+        cellVisitor{if fn($0) { count++ } }
+        return count
+    }
+    
     func clearBoard() {
         cellVisitor {self[$0] = .Empty}
     }

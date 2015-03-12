@@ -10,6 +10,7 @@ import Foundation
 class ReversiBoard: Board {
     private (set) var blackScore = 0, whiteScore = 0
     private (set) var nextMove = BoardCellState.White
+    private let reversiBoardDelegates = DelegateMulticast<ReversiBoardDelegate>()
     
     func setInitialState() {
         
@@ -22,6 +23,10 @@ class ReversiBoard: Board {
         
         blackScore = 2
         whiteScore = 2
+    }
+    
+    func addDelegate(delegate: ReversiBoardDelegate) {
+        reversiBoardDelegates.addDelegate(delegate)
     }
     
     func isValidMove(location: BoardLocation) -> Bool {
@@ -70,6 +75,11 @@ class ReversiBoard: Board {
         }
         
         nextMove = nextMove.invert()
+        
+        whiteScore = countMatches { self[$0] == BoardCellState.White }
+        blackScore = countMatches { self[$0] == BoardCellState.Black }
+        
+        reversiBoardDelegates.invokeDelegates{$0.boardStateChanged()}
     }
     
     //This method determines wether a move to a specific location on the board

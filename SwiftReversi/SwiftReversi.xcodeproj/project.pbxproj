@@ -25,6 +25,8 @@
 		0442A0291AB08C9200227563 /* DelegateMulticast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04089EA21AA2F9B800A1F895 /* DelegateMulticast.swift */; };
 		0442A02B1AB1D6FF00227563 /* MoveDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0442A02A1AB1D6FF00227563 /* MoveDirection.swift */; };
 		0442A02C1AB1D6FF00227563 /* MoveDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0442A02A1AB1D6FF00227563 /* MoveDirection.swift */; };
+		0442A02E1AB1E45100227563 /* ReversiBoardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0442A02D1AB1E45100227563 /* ReversiBoardDelegate.swift */; };
+		0442A02F1AB1E45100227563 /* ReversiBoardDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0442A02D1AB1E45100227563 /* ReversiBoardDelegate.swift */; };
 		727E1BDE194E179100A3E900 /* rrbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 727E1BDC194E179100A3E900 /* rrbutton.png */; };
 		727E1BDF194E179100A3E900 /* rrbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 727E1BDD194E179100A3E900 /* rrbutton@2x.png */; };
 		727E1BE4194E186400A3E900 /* ReversiBlackScore.png in Resources */ = {isa = PBXBuildFile; fileRef = 727E1BE0194E186400A3E900 /* ReversiBlackScore.png */; };
@@ -64,6 +66,7 @@
 		04089EA01AA2F96900A1F895 /* BoardDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardDelegate.swift; sourceTree = SOURCE_ROOT; };
 		04089EA21AA2F9B800A1F895 /* DelegateMulticast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegateMulticast.swift; sourceTree = SOURCE_ROOT; };
 		0442A02A1AB1D6FF00227563 /* MoveDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveDirection.swift; sourceTree = SOURCE_ROOT; };
+		0442A02D1AB1E45100227563 /* ReversiBoardDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReversiBoardDelegate.swift; sourceTree = SOURCE_ROOT; };
 		727E1BDC194E179100A3E900 /* rrbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rrbutton.png; sourceTree = "<group>"; };
 		727E1BDD194E179100A3E900 /* rrbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rrbutton@2x.png"; sourceTree = "<group>"; };
 		727E1BE0194E186400A3E900 /* ReversiBlackScore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ReversiBlackScore.png; sourceTree = "<group>"; };
@@ -192,6 +195,7 @@
 				04089EA01AA2F96900A1F895 /* BoardDelegate.swift */,
 				04089EA21AA2F9B800A1F895 /* DelegateMulticast.swift */,
 				0442A02A1AB1D6FF00227563 /* MoveDirection.swift */,
+				0442A02D1AB1E45100227563 /* ReversiBoardDelegate.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -320,6 +324,7 @@
 				0442A0251AB08C8200227563 /* DelegateMulticast.swift in Sources */,
 				728E600719436315000E9F89 /* ViewController.swift in Sources */,
 				04089E9D1AA2F42000A1F895 /* BoardSquare.swift in Sources */,
+				0442A02E1AB1E45100227563 /* ReversiBoardDelegate.swift in Sources */,
 				04089E911A9892A300A1F895 /* BoardCellState.swift in Sources */,
 				04089E971A98937100A1F895 /* Board.swift in Sources */,
 				04089E9F1AA2F60400A1F895 /* ReversiBoardView.swift in Sources */,
@@ -334,6 +339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0442A02F1AB1E45100227563 /* ReversiBoardDelegate.swift in Sources */,
 				0442A0261AB08C9200227563 /* BoardSquare.swift in Sources */,
 				0442A0271AB08C9200227563 /* ReversiBoardView.swift in Sources */,
 				0442A0281AB08C9200227563 /* BoardDelegate.swift in Sources */,

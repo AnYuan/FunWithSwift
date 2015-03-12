@@ -48,8 +48,26 @@ class BoardSquare: UIView, BoardDelegate {
     
     private func update() {
         let state = board[location]
-        whiteView.alpha = state == BoardCellState.White ? 1.0 : 0.0
-        blackView.alpha = state == BoardCellState.Black ? 1.0 : 0.0
+        
+        UIView.animateWithDuration(0.2, animations: {
+            
+            switch state {
+            case .White:
+                self.whiteView.alpha = 1.0
+                self.blackView.alpha = 0.0
+                self.whiteView.transform = CGAffineTransformIdentity
+                self.blackView.transform = CGAffineTransformMakeTranslation(0, 20)
+            case .Black:
+                self.whiteView.alpha = 0.0
+                self.blackView.alpha = 1.0
+                self.whiteView.transform = CGAffineTransformMakeTranslation(0, -20)
+                self.blackView.transform = CGAffineTransformIdentity
+            case .Empty:
+                self.whiteView.alpha = 0.0
+                self.blackView.alpha = 0.0
+            }
+        })
+        
     }
     
     func cellTapped() {

@@ -41,12 +41,21 @@ class BoardSquare: UIView, BoardDelegate {
         update()
         
         board.addDelegate(self)
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: "cellTapped")
+        addGestureRecognizer(tapRecognizer)
     }
     
     private func update() {
         let state = board[location]
         whiteView.alpha = state == BoardCellState.White ? 1.0 : 0.0
         blackView.alpha = state == BoardCellState.Black ? 1.0 : 0.0
+    }
+    
+    func cellTapped() {
+        if board.isValidMove(location) {
+            board.makeMove(location)
+        }
     }
     
     func cellStateChanged(location: BoardLocation) {

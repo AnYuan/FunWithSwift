@@ -23,7 +23,7 @@ func halfOpenRangeLength(start start: Int, end: Int) -> Int {
 print(halfOpenRangeLength(start: 1, end: 10))
 
 //Default Parameter Values
-/*
+/*:
 Place parameters with default values at the end of a function's
 parameter list. This ensures that all calls to the function use
 the same order for their nondefault arguments, and makes it clear
@@ -46,7 +46,7 @@ twoDefaultParameters(3,parameterTwo: 4)
 
 
 //In-Out Parameters
-/*
+/*:
 In-out parameters cannot have default values, and variadic parameters
 cannot be marked as inout. If you mark a parameter as inout, it cannot
 also be marked as var or let.
@@ -65,7 +65,7 @@ someInt
 anotherInt
 
 
-//Function Types as Return Types
+//:Function Types as Return Types
 func stepForward(input: Int) -> Int {
     return input + 1
 }

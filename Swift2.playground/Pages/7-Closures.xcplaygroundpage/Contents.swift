@@ -74,6 +74,27 @@ let strings = numbers.map {
     return output
 }
 
+//:Capturing Values
+//:nested function
+func makeIncrementer(forIncrement amount: Int) -> Void -> Int
+{
+    var runningTotal = 0
+    
+    func incrementer() -> Int
+    {
+        runningTotal += amount
+        return runningTotal
+    }
+    return incrementer
+}
+
+let incrementByTen = makeIncrementer(forIncrement: 10)
+
+var someInt = incrementByTen()
+someInt = incrementByTen()
+someInt = incrementByTen()
+
+//: Closures Are Reference Types
 
 
 

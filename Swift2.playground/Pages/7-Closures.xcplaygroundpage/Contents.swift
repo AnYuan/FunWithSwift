@@ -64,7 +64,7 @@ let strings = numbers.map {
     (var number) -> String in
     var output = ""
     while number > 0 {
-        output = digitNames[numbers % 10]! + output
+        output = digitNames[number % 10]! + output
         number /= 10
     }
     return output

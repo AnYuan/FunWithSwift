@@ -11,5 +11,6 @@
         <page name='7-Closures'/>
         <page name='8-Enum'/>
         <page name='9-Classes and Structures'/>
+        <page name='10-Properties'/>
     </pages>
 </playground>

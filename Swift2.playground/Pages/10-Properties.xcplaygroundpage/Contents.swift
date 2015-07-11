@@ -121,6 +121,8 @@ stepCounter.totalSteps = 200
    For classes, you can define computed type properties only.
    Stored type properties for value types can be variables or constants. You must always give stored type properties a default value. This is because the type iteself does not have an initializer that can assign a value to a stored type property at initialization time.
    Computed type properties are always declared as variable properties.
+
+   You define type properties with static keyword. For computed type properties for class types, you can use the class keyword instead to allow subclasses to override the superclass's implementation.
 */
 struct SomeStructure {
     static var storedTypeProperty = "Some Value"

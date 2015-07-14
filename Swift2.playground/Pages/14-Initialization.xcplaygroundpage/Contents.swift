@@ -112,11 +112,11 @@ beetsQuestion.ask()
 beetsQuestion.response = "I also like beets."
 
 //:default initializers
-class ShoppingListItem {
-    var name: String?
-    var quantity = 1
-    var purchased = false
-}
+//class ShoppingListItem {
+//    var name: String?
+//    var quantity = 1
+//    var purchased = false
+//}
 
 var item = ShoppingListItem()
 
@@ -139,7 +139,7 @@ struct Rect {
 //        self.origin = origin
 //        self.size = size
 //    }
-    
+//    
 //    init(center: Point, size: Size) {
 //        let originX = center.x - (size.width / 2)
 //        let originY = center.y - (size.height / 2)
@@ -169,13 +169,101 @@ struct Test_cus {
 }
 
 
+/*:Initializer Delegation for Class Types
+Rule 1:
+A designated initializer must call a designated initializer from its immediate superclass.
+Rule 2:
+A convenience initializer must call another initializer from the same class.
+Rule 3:
+A convenience initializer must ultimately call a designated initializer.
+
+A simple way to remember this is:
+* Designated initializers must always delegate up.
+* Convenience initializers must always delegate across.
+
+Two-Phase Initialization
+In the first phase, each stored property is assigned an initial value by the class that introduced it. Once the initial state for every stored property has been determined
+The second phase begins, and each class is given the opportunity to customize its stored properties further before the new instance is considerd ready for use.
+*/
+
+//:Initializer Inheritance and overriding
+class Vehicle {
+    var numberOfWheels = 0
+    var description: String {
+        return "\(numberOfWheels) wheel(s)"
+    }
+}
+
+let vehicle = Vehicle()
+vehicle.description
+
+class Bicycle: Vehicle {
+    override init() {
+        super.init()
+        numberOfWheels = 2
+    }
+}
+
+let bicycle = Bicycle()
+bicycle.description
+
+//:Automatic Initializer Inheritance
+/*:
+Rule 1:
+If your subclass doesn't define any designated initializers, it automatically inherits all of its superclass designated initializers.
+Rule 2:
+If your subclass provides an implementation of all of its superclass designated initializers -- either by inheriting them as per rule1, or by providing a custom implementation as part of its definition --then it automatically inherits all of the superclass convenience initializers.
+*/
+
+class Food {
+    var name: String
+    init(name: String) {
+        self.name = name
+    }
+    
+    convenience init() {
+        self.init(name: "[Unnamed]")
+    }
+}
+
+let namedMeat = Food(name: "Bacon")
+let mysteryMeat = Food()
+
+class RecipeIngredient: Food {
+    var quantity: Int
+    init(name: String, quantity: Int) {
+        self.quantity = quantity
+        super.init(name: name)
+    }
+    
+    override convenience init(name: String) {
+        self.init(name: name, quantity: 1)
+    }
+}
+
+let oneMysteryItem = RecipeIngredient()
+oneMysteryItem.name
+oneMysteryItem.quantity
+let oneBacon = RecipeIngredient(name: "Bacon")
+let sixEggs = RecipeIngredient(name: "Eggs", quantity: 6)
 
 
+class ShoppingListItem: RecipeIngredient {
+    var purchased = false
+    var description: String {
+        var output = "\(quantity) * \(name)"
+        output += purchased ? "yes" : "no"
+        return output
+    }
+}
 
+var breakfastList = [ShoppingListItem(), ShoppingListItem(name: "Bacon"), ShoppingListItem(name: "eggs", quantity: 6)]
 
-
-
-
+breakfastList[0].name = "Orange juice"
+breakfastList[0].purchased = true
+for item in breakfastList {
+    print(item.description)
+}
 
 
 

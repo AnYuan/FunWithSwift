@@ -265,13 +265,159 @@ for item in breakfastList {
     print(item.description)
 }
 
+//:Failable Initializers for struct
+
+struct Animal {
+    let species: String
+    init?(species: String) {
+        if species.isEmpty {return nil}
+        self.species = species
+    }
+}
 
 
+let someCreature = Animal(species: "Giraffe")
+if let giraffe = someCreature {
+    print("An animal was initialized with a species of \(giraffe.species)")
+}
+
+let anonymousCreature = Animal(species: "")
+
+if anonymousCreature == nil {
+    print("The anonymous creature could not be initialized")
+}
+
+//:Failable Initializers for Enumerations
+//enum TemperatureUnit {
+//    case Kelvin, Celsius, Fahrenheit
+//    
+//    init?(symbol: Character) {
+//        switch symbol {
+//            case "K":
+//                self = .Kelvin
+//            case "C":
+//                self = .Celsius
+//            case "F":
+//                self = .Fahrenheit
+//            default:
+//                return nil
+//        }
+//    }
+//}
+
+//:Failable Initializers for Enumerations with Raw Values
+enum TemperatureUnit: Character {
+    case Kelvin = "K", Celsius = "C", Fahrenheit = "F"
+}
+
+let unknownUnit = TemperatureUnit(rawValue: "X")
+if unknownUnit == nil {
+    print("nil")
+}
+
+//:Failable Initializers for classes
+class Product {
+    let name: String!
+    init?(name: String) {
+        self.name = name
+        if name.isEmpty {return nil}
+    }
+}
+
+//:Propagation of Initialization Failure
+class CartItem: Product {
+    let quantity: Int!
+    init?(name: String, quantity: Int) {
+        self.quantity = quantity
+        super.init(name: name)
+        if quantity < 1 {return nil}
+    }
+}
 
 
+if let zeroShirts = CartItem(name: "shirt", quantity: 0) {
+    print("has something")
+} else {
+    print("nil")
+}
+
+//:Overriding a Failable Initializer
+class Document {
+    var name: String?
+    init() {}
+    init?(name: String) {
+        self.name = name
+        if name.isEmpty {return nil}
+    }
+}
+
+class AutomaticallyNamedDocument: Document {
+    override init() {
+        super.init()
+        self.name = "[untitled]"
+    }
+    
+    override init?(name: String) {
+        super.init()
+        if name.isEmpty {
+            self.name = "[untitled]"
+        } else {
+            self.name = name
+        }
+    }
+}
+
+//:The init! Failable Initializer
+//can delegate from init? to init! and vice versa
+//can override init? with init! and vice versa
 
 
+//:Required Initializers
+class SomeClass {
+    required init() {
+        
+    }
+}
 
+//you do not have to provide an explicit implementation of a required initializer if you can satisfy the requirement with an inherited initializer.
+class SomeSubclass: SomeClass {
+    required init() {
+        
+    }
+}
+
+
+//:Setting a default property value with a Closure or Function
+//class SomeClass {
+//    let someProperty: SomeType = {
+//       return someValue
+//    }()
+//}
+
+//:Note that the closure's end curly brace is followed by an empty pair of parentheses. This tells Swift to extecute the closure immediately. if you omit these parentheses, you are trying to assign the closure itself to the property, and not the return value of the closure.
+//:If you use a closure to initialize a property, remember that the rest of the instance has not yet been initialized at the point that the closure is executed. This means that you cannot access any other property values from within your closure, even if those properties have default values. You also cannot use the implicit self property, or call any of the instance's methods.
+
+struct Checkerboard {
+    let boardColors: [Bool] = {
+        var temporaryBoard = [Bool]()
+        var isBlack = false
+        for i in 1...10 {
+            for j in 1...10 {
+                temporaryBoard.append(isBlack)
+                isBlack = !isBlack
+            }
+            isBlack = !isBlack
+        }
+        return temporaryBoard
+    }()
+    func squareIsBlackAtRow(row: Int, column: Int) -> Bool {
+        return boardColors[(row * 10) + column]
+    }
+}
+
+let board = Checkerboard()
+board.squareIsBlackAtRow(0, column: 1)
+board.squareIsBlackAtRow(9, column: 9)
 
 
 

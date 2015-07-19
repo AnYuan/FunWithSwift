@@ -123,8 +123,52 @@ class City {
 var country = Country(name: "Canada", capitalName: "Ottawa")
 
 //:Strong Reference Cycles for Closures
+/*:
+A strong reference cycle can also occur if you assign a closure to a property of a class instance, and the body of that closure captures the instance. This capture might occur because the closure's body accesses a property of the instance, such as self.someProperty, or because the closure calls a method on the instance, such as self.someMethod(). In either case, these accesses cause the closure to "capture" self, creating a strong reference cycle.
+This strong refernce cycle occures because closures, like classes, are reference types. When you assign a closure to a property, you are assigning a reference to that closure.
+Swift provides an elegant solution to this problem, known as a closure capture list.
+
+Swift requires you to write self.someProperty or self.someMethod() whenever you refer to a member of self within a closure. This helps you remember that it's possible to capture self by accident.
+*/
+
+class HTMLElement {
+    let name: String
+    let text: String?
+    
+    lazy var asHTML: Void -> String = {
+        [unowned self] in
+        if let text = self.text {
+            return "<\(self.name)>\(text)</\(self.name)>"
+        } else {
+            return "<\(self.name)>"
+        }
+    }
+    
+    init(name: String, text: String? = nil) {
+        self.name = name
+        self.text = text
+    }
+    
+    deinit {
+        print("\(name) is being deinitialized")
+    }
+}
 
 
+var paragraph: HTMLElement? = HTMLElement(name: "p", text: "hello, world")
+print(paragraph!.asHTML())
+paragraph = nil
+
+
+//:Defining a Capture List
+//lazy var someClosure: (Int, String) -> String = {
+//    [unowned self, weak delegate = self.delegate!] (index: Int, stringToProcess: String) -> String in
+//    //closure body goes here
+//}
+//lazy var someClosure: Void -> String = {
+//    [unowned self, weak delegate = self.delegate!] in
+//    //closure body goes here
+//}
 
 
 

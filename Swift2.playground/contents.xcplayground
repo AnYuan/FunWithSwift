@@ -20,5 +20,6 @@
         <page name='16-ARC'/>
         <page name='17-Optional Chaining'/>
         <page name='18-Error Handling'/>
+        <page name='19-Type Casting'/>
     </pages>
 </playground>

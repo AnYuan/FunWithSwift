@@ -25,5 +25,6 @@
         <page name='21-Extensions'/>
         <page name='22-Protocols'/>
         <page name='23-Generics'/>
+        <page name='24-Access Control'/>
     </pages>
 </playground>

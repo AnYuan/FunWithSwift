@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <playground version='6.0' target-platform='ios' requires-full-environment='true' display-mode='raw'>
     <pages>
-        <page name='0-Swift tour'/>
-        <page name='1-basics'/>
         <page name='2-Basic Operators'/>
+        <page name='1-basics'/>
+        <page name='0-Swift tour'/>
         <page name='3-Strings and Characters'/>
         <page name='4-Collection Types'/>
         <page name='5-Control Flow'/>
@@ -16,16 +16,5 @@
         <page name='12-Subscripts'/>
         <page name='13-Inheritance'/>
         <page name='14-Initialization'/>
-        <page name='15-Deinitialization'/>
-        <page name='16-ARC'/>
-        <page name='17-Optional Chaining'/>
-        <page name='18-Error Handling'/>
-        <page name='19-Type Casting'/>
-        <page name='20-Nested Types'/>
-        <page name='21-Extensions'/>
-        <page name='22-Protocols'/>
-        <page name='23-Generics'/>
-        <page name='24-Access Control'/>
-        <page name='25-Advanced Operators'/>
     </pages>
 </playground>

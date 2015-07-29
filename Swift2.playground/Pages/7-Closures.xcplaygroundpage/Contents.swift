@@ -98,10 +98,15 @@ someInt = incrementByTen()
 
 
 
+//:
+var a: [() -> Int] = []
+for i in 1...3 {
+    a.append { i }
+}
 
-
-
-
+for f in a {
+    print("\(f())")
+}
 
 
 

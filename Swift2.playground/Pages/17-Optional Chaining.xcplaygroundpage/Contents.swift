@@ -136,6 +136,12 @@ if let mikesStreet = mike.residence?.address?.street {
     print("nooooooo")
 }
 
+
+
+
+
+
+
 //:swich unwrap
 var array = ["one", "two", "three"]
 
@@ -280,5 +286,54 @@ func doStuffWithFileExtension(fileName: String) {
     let fileExtension = fileName[extensionRange]
     print(fileExtension)
 }
+
+
+
+//:Optional chaining for function and subscript
+let dictOfArrays = ["nine":[0,1,2,3,4,5,6,7]]
+let sevenOfNine = dictOfArrays["nine"]?[7]
+
+let dictOfFuncs: [String: (Int, Int) -> Int] = [
+    "add":(+),
+    "subtract":(-)
+]
+
+dictOfFuncs["add"]?(1,1)
+
+
+/*:you can assign through an optional chain. Suppose you have an optional variable, and if its non-nil, you wish to update one of its properties:
+if splitViewController != nil {
+    splitViewController!.delegate = myDelegate
+}
+
+Instead, you can assign to be the chained optional value, and if it isn't nil, the assignment will work:
+splitViewController?.delegate = myDelegate
+*/
+
+
+/*:
+Nil-coalescing operator
+if let n = i ?? j {
+    //similar to if i != nil || j != nil
+}
+
+if let n = i, m = j {
+    //similar to if i != nil && j != nil
+}
+*/
+let s1: String?? = nil
+(s1 ?? "inner") ?? "outer"
+let s2: String?? = .Some(nil)
+(s2 ?? "inner") ?? "outer"
+s1
+s2
+
+
+
+
+
+
+
+
 
 

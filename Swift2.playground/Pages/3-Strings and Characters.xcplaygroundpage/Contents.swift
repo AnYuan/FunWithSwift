@@ -32,16 +32,16 @@ let greeting = "Guten Tag"
 greeting[greeting.startIndex]
 greeting[greeting.endIndex.predecessor()]
 greeting[greeting.startIndex.successor()]
-let index = advance(greeting.startIndex, 7)
+let index = greeting.startIndex.advancedBy(7)
 greeting[index]
 
 var welcome = "hello"
 welcome.insert("!", atIndex: welcome.endIndex)
-welcome.splice(" there".characters, atIndex: welcome.endIndex.predecessor())
+welcome.insertContentsOf(" there".characters, at: welcome.endIndex.predecessor())
 welcome.removeAtIndex(welcome.endIndex.predecessor())
 welcome
 
-let range = advance(welcome.endIndex, -6)..<welcome.endIndex
+let range = welcome.endIndex.advancedBy(-6)..<welcome.endIndex
 welcome.removeRange(range)
 
 let quotation = "We're a lot alike, you and I."

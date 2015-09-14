@@ -219,22 +219,219 @@ oddDigits.exclusiveOr(singleDigitPrimeNumbers).sort()
 
 
 
+//:Designing a protocol for queues
+protocol QueueType {
+    //The type of elements held in 'self'
+    typealias Element
+    
+    //enqueue 'newElement' to 'self'
+    mutating func enqueue(newElement: Element)
+    
+    //dequeue an element from 'self'
+    mutating func dequeue() -> Element?
+}
+
+struct Queue<Element> {
+    private var left: [Element]
+    private var right: [Element]
+    
+    init() {
+        left = []; right = []
+    }
+    
+    /// Add an element to the back of the queue in O(1).
+    mutating func enqueue(element: Element) {
+        right.append(element)
+    }
+    
+    /// Removes front of the queue in amortized O(1).
+    /// Returns nil in case of an empty queue.
+    mutating func dequeue() -> Element? {
+        guard !(left.isEmpty && right.isEmpty)
+            else { return nil }
+        
+        if left.isEmpty {
+            left = right.reverse()
+            right.removeAll(keepCapacity: true)
+        }
+        return left.removeLast()
+    }
+}
+
+extension Queue: CollectionType {
+    var startIndex: Int { return 0 }
+    var endIndex: Int { return left.count + right.count }
+    
+    subscript(idx: Int) -> Element {
+        guard idx < endIndex else { fatalError("Index out of bounds") }
+        if idx < left.endIndex {
+            return left[left.count - idx.successor()]
+        } else {
+            return right[idx - left.count]
+        }
+    }
+}
+
+
+var q = Queue<String>()
+for x in ["1","2","foo","3"] {
+    q.enqueue(x)
+}
+
+// you can now for...in over queues
+for s in q { print(s) }     // prints 1 2 foo 3
+
+// pass queues to methods that take sequences
+q.joinWithSeparator(",")    // "1,2,foo,3"
+let aa = Array(q)            // aa = ["1","2","foo","3]
+
+// call methods that extend SequenceType
+q.map { $0.uppercaseString} // ["1","2","FOO","3"]
+q.flatMap { Int($0) }       // [1,2,3]
+q.filter {                  // ["foo"]
+    $0.characters.count > 1
+}
+
+// and CollectionType
+q.isEmpty                   // false
+q.count                     // 4
+q.first                     // "1"
+q.last                      // "3"
 
 
 
+extension Queue: ArrayLiteralConvertible {
+    init(arrayLiteral elements: Element...) {
+        self.left = elements.reverse()
+        self.right = []
+    }
+}
+
+let qq: Queue = [1,2,3]
+
+extension Queue: RangeReplaceableCollectionType {
+    mutating func reserveCapacity(n: Int) {
+        return
+    }
+    
+    mutating func replaceRange<C : CollectionType where C.Generator.Element == Element>
+        (subRange: Range<Int>, with newElements: C) {
+            right = left.reverse() + right
+            left.removeAll(keepCapacity: true)
+            right.replaceRange(subRange, with: newElements)
+    }
+}
+
+/// A simple linked list enum
+enum List<Element> {
+    /// The end of a list
+    case End
+    indirect case Node(Element, next: List<Element>)
+}
+
+extension List {
+    /// Return a new list by prepending a node
+    /// with value `x` to the front of a list.
+    func cons(x: Element) -> List {
+        return .Node(x, next: self)
+    }
+}
+
+// a 3-element list, of (3 2 1)
+let l = List<Int>.End.cons(1).cons(2).cons(3)
+
+/// A LIFO stack type with constant-time push and pop operations
+protocol StackType {
+    /// The type of element held stored in the stack
+    typealias Element
+    
+    /// Pushes `x` onto the top of `self`
+    ///
+    /// - Complexity: Amortized O(1).
+    mutating func push(x: Element)
+    /// Removes the topmost element of `self` and returns it,
+    /// or `nil` if `self` is empty.
+    ///
+    /// - Complexity: O(1)
+    mutating func pop() -> Element?
+}
+
+extension Array: StackType {
+    mutating func push(x: Element) {
+        self.append(x)
+    }
+    
+    mutating func pop() -> Element? {
+        guard !isEmpty else { return nil }
+        return removeLast()
+    }
+}
+
+extension List: StackType {
+    mutating func push(x: Element) {
+        self = self.cons(x)
+    }
+    
+    mutating func pop() -> Element? {
+        switch self {
+        case .End: return nil
+        case let .Node(x, next: xs):
+            self = xs
+            return x
+        }
+    }
+}
 
 
+var stack = List<Int>.End.cons(1).cons(2).cons(3)
+var aaa = stack
+var bbb = stack
 
+aaa.pop() // 3
+aaa.pop() // 2
+aaa.pop() // 1
 
+stack.pop() // 3
+stack.push(4)
 
+bbb.pop() // 3
+bbb.pop() // 2
+bbb.pop() // 1
 
+stack.pop() // 4
+stack.pop() // 2
+stack.pop() // 1
 
+extension List: SequenceType {
+    func generate() -> AnyGenerator<Element> {
+        // declare a variable to capture that
+        // tracks progression through the list:
+        var current = self
+        return anyGenerator {
+            // next() will pop, returning nil
+            // when the list is empty:
+            current.pop()
+        }
+    }
+}
 
+extension List: ArrayLiteralConvertible {
+    init(arrayLiteral elements: Element...) {
+        self = elements.reverse().reduce(.End) {
+            $0.cons($1)
+        }
+    }
+}
 
+let ll: List = ["1","2","3"]
+for x in ll {
+    print("\(x) ", terminator: "")
+}
 
-
-
-
+ll.joinWithSeparator(",")        // "1,2,3"
+ll.contains("2")                 // true
+ll.flatMap { Int($0) }           // [1,2,3]
+ll.elementsEqual(["1","2","3"])  // true
 
 
 

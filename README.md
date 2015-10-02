@@ -6,7 +6,7 @@
 * SwiftReversi Swift vs. Objective-C Demo code
 * SHCReversiGame 是SwiftReversi 中的Objective-C 实现
 * Swift_Standard_Library.playground 是Apple 提供的Swift标准库的playground
-
+* [The Best of What's New in Swift](https://www.mikeash.com/pyblog/friday-qa-2015-06-19-the-best-of-whats-new-in-swift.html)
 
 ###Protocol Oriented Programming
 * [Protocol-Oriented Programming in Swift](https://developer.apple.com/videos/wwdc/2015/?id=408)

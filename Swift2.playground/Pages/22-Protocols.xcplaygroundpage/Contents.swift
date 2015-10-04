@@ -351,7 +351,7 @@ class Counter {
     }
 }
 
-class ThreeSource: CounterDataSource {
+class ThreeSource: NSObject, CounterDataSource {
     let fixedIncrement = 3
 }
 
@@ -385,11 +385,21 @@ extension PrettyTextRepresentable {
 }
 
 //:Adding Constraints to Protocol Extensions
+//extension CollectionType where Generator.Element: TextRepresentable {
+//    func asList() -> String {
+//        return "(" + ", ".join(map({$0.asText()})) + ")"
+//    }
+//}
+
 extension CollectionType where Generator.Element: TextRepresentable {
-    func asList() -> String {
-        return "(" + ", ".join(map({$0.asText()})) + ")"
+    var textualDescription: String {
+        let itemsAsText = self.map {
+            $0.asText()
+        }
+        return "[" + itemsAsText.joinWithSeparator(", ") + "]"
     }
 }
+
 
 let murraytheHamster = Hamster(name:"Murray")
 let morganTheHamster = Hamster(name:"Morgan")
@@ -397,7 +407,7 @@ let mauriceTheHamster = Hamster(name:"Maurice")
 
 let hamsters = [murraytheHamster, morganTheHamster, mauriceTheHamster]
 
-print(hamsters.asList())
+print(hamsters.textualDescription)
 
 
 

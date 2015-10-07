@@ -10,7 +10,7 @@ class CoreGraphicsDiagramView : UIView {
     override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         CGContextSaveGState(context)
-        draw(context)
+        draw(context!)
         
         let lightBlue = CGColorCreate(
             CGColorSpaceCreateDeviceRGB(), [0.222, 0.617, 0.976, 1.0])

@@ -434,23 +434,124 @@ ll.flatMap { Int($0) }           // [1,2,3]
 ll.elementsEqual(["1","2","3"])  // true
 
 
+let standardIn = AnySequence {
+    return anyGenerator {
+        readLine()
+    }
+}
+
+let numberedStdIn = standardIn.enumerate()
+for (i, line) in numberedStdIn {
+    print("\(i+1): \(line)")
+}
+
+extension SequenceType {
+    func enumerate() -> AnySequence<(Int,Generator.Element)> {
+        
+        // Swift currently needs a type-inference helping hand with this closure:
+        return AnySequence { _ -> AnyGenerator<(Int,Generator.Element)> in
+            
+            // create a fresh counter and generator to begin enumeration
+            var i = 0
+            var g = self.generate()
+            // capture these in a closure and return that in a new generator
+            return anyGenerator {
+                // when the base sequence is exhausted, return nil
+                guard let next = g.next()
+                    else { return nil }
+                
+                return (i++, next)
+            }
+        }
+    }
+}
+
+
+/// Private implementation detail of the List collection
+private enum ListNode<Element> {
+    case End
+    indirect case Node(Element, tag: Int, next: ListNode<Element>)
+    
+    /// Computed property to fetch the tag. .End has an
+    /// implicit tag of zero.
+    var tag: Int {
+        switch self {
+        case .End: return 0
+        case let .Node(_, tag: n, _):
+            return n
+        }
+    }
+    
+    func cons(x: Element) -> ListNode<Element> {
+        // each cons increments the tag by one
+        return .Node(x, tag: tag+1, next: self)
+    }
+}
+
+public struct ListIndex<Element> {
+    private let node: ListNode<Element>
+}
 
 
 
 
+assert(sizeof(ListNode<Int>) == sizeof(ListIndex<Int>))
+
+extension ListIndex: ForwardIndexType {
+    public func successor() -> ListIndex<Element> {
+        switch node {
+        case .End:
+            fatalError("cannot increment endIndex")
+        case let .Node(_, _, next: next):
+            return ListIndex(node: next)
+        }
+    }
+}
+
+public func == <T>(lhs: ListIndex<T>, rhs: ListIndex<T>) -> Bool {
+    return lhs.node.tag == rhs.node.tag
+}
 
 
+public struct List_n<Element>: CollectionType {
+    // Index's type could be inferred, but it helps make the
+    // rest of the code clearer:
+    public typealias Index = ListIndex<Element>
+    
+    public var startIndex: Index
+    public var endIndex: Index
+    
+    public subscript(idx: Index) -> Element {
+        switch idx.node {
+        case .End: fatalError("Subscript out of range")
+        case let .Node(x, _, _): return x
+        }
+    }
+}
 
 
+extension List_n: ArrayLiteralConvertible {
+    public init(arrayLiteral elements: Element...) {
+        startIndex = ListIndex(node: elements.reverse().reduce(.End) {
+            $0.cons($1)
+            })
+        endIndex = ListIndex(node: .End)
+    }
+}
 
+let lll: List_n = ["one", "two", "three"]
+lll.first
+lll.indexOf("two")
 
+extension List_n {
+    public var count: Int {
+        return startIndex.node.tag - endIndex.node.tag
+    }
+}
 
-
-
-
-
-
-
+public func == <T: Equatable>(lhs: List_n<T>, rhs: List_n<T>) -> Bool {
+    return lhs.elementsEqual(rhs)
+}
 
 
 

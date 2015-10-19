@@ -166,8 +166,16 @@ if let convertedRank = Rank(rawValue: 11) {
     let threeDes = convertedRank.simpleDes()
 }
 
+//Mon, 19 Oct 2015 03:05:37 GMT
+let dateFormat = NSDateFormatter()
+let gmt = NSTimeZone(abbreviation: "GMT")
+dateFormat.timeZone = gmt
+//dateFormat.dateStyle = .MediumStyle
+//dateFormat.timeStyle = .LongStyle
 
+dateFormat.dateFormat = "E, dd MMM yyyy H:mm:SS z"
 
+dateFormat.stringFromDate(NSDate())
 
 
 

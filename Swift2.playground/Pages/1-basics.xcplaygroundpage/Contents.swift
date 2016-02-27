@@ -61,3 +61,52 @@ do {
 } catch {
     //an error was thrown
 }
+
+
+
+var dict :[String:String?] = [:]
+// first try
+dict = ["key": "value"]
+dict["key"] = Optional<Optional<String>>.None
+dict
+
+// second try
+dict = ["key": "value"]
+dict["key"] = Optional<String>.None
+dict
+
+// third try
+dict = ["key": "value"]
+dict["key"] = nil
+dict
+
+// forth try
+dict = ["key": "value"]
+let nilValue:String? = nil
+dict["key"] = nilValue
+dict
+
+// fifth try
+dict = ["key": "value"]
+let nilValue2:String?? = nil
+dict["key"] = nilValue2
+dict
+
+let a: Int? = nil
+let b: Int?? = a
+let c: Int??? = b
+let d: Int??? = nil
+
+let e: Int?? = nil
+
+if let _ = e {
+    print("e is not none")
+}
+
+if let _ = b {
+    print("b is not none")
+}
+
+if let _ = c {
+    print("c is not none")
+}

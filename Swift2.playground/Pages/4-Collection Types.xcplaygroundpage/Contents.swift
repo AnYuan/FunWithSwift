@@ -50,32 +50,49 @@ for fib in fibs {
     squared.append(fib * fib)
 }
 
+let s_fibs = fibs.map {$0 * $0}
+s_fibs
+
+extension Array {
+    func accumulate<U>(initial: U, combine:(U,Element) -> U) -> [U] {
+        var running = initial
+        return self.map {
+            next in
+            running = combine(running, next)
+            return running
+        }
+    }
+}
+[1,2,3,4].accumulate(0, combine: +)
+
+
+
 squared
 
 let squared_ = fibs.map{$0 * $0}
 squared
 
 
-extension Array {
-    func map<U>(transform: Element->U) -> [U] {
-        var result: [U] = []
-        result.reserveCapacity(self.count)
-        for x in self {
-            result.append(transform(x))
-        }
-        return result
-    }
-}
-
-extension Array {
-    func flatMap<U>(transform: Element->[U]) -> [U] {
-        var result: [U] = []
-        for x in self {
-            result.appendContentsOf(transform(x))
-        }
-        return result
-    }
-}
+//extension Array {
+//    func map<U>(transform: Element->U) -> [U] {
+//        var result: [U] = []
+//        result.reserveCapacity(self.count)
+//        for x in self {
+//            result.append(transform(x))
+//        }
+//        return result
+//    }
+//}
+//
+//extension Array {
+//    func flatMap<U>(transform: Element->[U]) -> [U] {
+//        var result: [U] = []
+//        for x in self {
+//            result.appendContentsOf(transform(x))
+//        }
+//        return result
+//    }
+//}
 
 let suits = ["♠︎", "♥︎", "♣︎", "♦︎"]
 let ranks = ["J","Q","K","A"]
@@ -84,6 +101,11 @@ let allCombinations = suits.flatMap { suit in
     ranks.map { rank in
         (suit, rank)
     }
+}
+
+(1..<10).forEach {number in
+    print(number)
+    if number > 2 {return}
 }
 
 allCombinations
@@ -95,15 +117,15 @@ fibs.indexOf(2)
 let a = fibs.filter{$0 % 2 == 0}
 a
 
-extension Array {
-    func filter(includeElement: Element -> Bool) -> [Element] {
-        var result: [Element] = []
-        for x in self where includeElement(x) {
-            result.append(x)
-        }
-        return result
-    }
-}
+//extension Array {
+//    func filter(includeElement: Element -> Bool) -> [Element] {
+//        var result: [Element] = []
+//        for x in self where includeElement(x) {
+//            result.append(x)
+//        }
+//        return result
+//    }
+//}
 
 //:reduce
 var total = 0
@@ -116,15 +138,15 @@ fibs.reduce(0, combine: +)
 let fibs_str = fibs.reduce(""){str, num in str + "\(num)\n"}
 fibs_str
 
-extension Array {
-    func reduce<U>(initial: U, combine: (U,Element)->U) -> U {
-        var result = initial
-        for x in self {
-            result = combine(result,x)
-        }
-        return result
-    }
-}
+//extension Array {
+//    func reduce<U>(initial: U, combine: (U,Element)->U) -> U {
+//        var result = initial
+//        for x in self {
+//            result = combine(result,x)
+//        }
+//        return result
+//    }
+//}
 
 
 //:Dic
@@ -445,26 +467,26 @@ for (i, line) in numberedStdIn {
     print("\(i+1): \(line)")
 }
 
-extension SequenceType {
-    func enumerate() -> AnySequence<(Int,Generator.Element)> {
-        
-        // Swift currently needs a type-inference helping hand with this closure:
-        return AnySequence { _ -> AnyGenerator<(Int,Generator.Element)> in
-            
-            // create a fresh counter and generator to begin enumeration
-            var i = 0
-            var g = self.generate()
-            // capture these in a closure and return that in a new generator
-            return anyGenerator {
-                // when the base sequence is exhausted, return nil
-                guard let next = g.next()
-                    else { return nil }
-                
-                return (i++, next)
-            }
-        }
-    }
-}
+//extension SequenceType {
+//    func enumerate() -> AnySequence<(Int,Generator.Element)> {
+//        
+//        // Swift currently needs a type-inference helping hand with this closure:
+//        return AnySequence { _ -> AnyGenerator<(Int,Generator.Element)> in
+//            
+//            // create a fresh counter and generator to begin enumeration
+//            var i = 0
+//            var g = self.generate()
+//            // capture these in a closure and return that in a new generator
+//            return anyGenerator {
+//                // when the base sequence is exhausted, return nil
+//                guard let next = g.next()
+//                    else { return nil }
+//                
+//                return (i++, next)
+//            }
+//        }
+//    }
+//}
 
 
 /// Private implementation detail of the List collection
@@ -554,6 +576,84 @@ public func == <T: Equatable>(lhs: List_n<T>, rhs: List_n<T>) -> Bool {
 }
 
 
+
+let dic = [["1":1], ["2": 2]]
+let result = dic.flatMap {$0}
+result
+
+
+//map
+var o1:Int? = nil
+
+var o1m = o1.map({$0 * 2})
+o1m /* Int? with content nil */
+
+o1 = 1
+
+o1m = o1.map({$0 * 2})
+o1m /* Int? with content 2 */
+
+var os1m = o1.map({ (value) -> String in
+    String(value * 2)
+})
+os1m /* String? with content 2 */
+
+os1m = o1.map({ (value) -> String in
+    String(value * 2)
+}).map({"number "+$0})
+os1m /* String? with content "number 2" */
+
+
+
+//flatMap
+var fo1:Int? = nil
+
+var fo1m = fo1.flatMap({$0 * 2})
+fo1m /* Int? with content nil */
+
+fo1 = 1
+
+fo1m = fo1.flatMap({$0 * 2})
+fo1m /* Int? with content 2 */
+
+var fos1m = fo1.flatMap({ (value) -> String? in
+    String(value * 2)
+})
+fos1m /* String? with content "2" */
+
+var fs1:String? = "1"
+
+var fi1 = fs1.flatMap {
+    Int($0)
+}
+fi1 /* Int? with content "1" */
+
+var fi2 = fs1.flatMap {
+    Int($0)
+    }.map {$0*2}
+
+fi2 /* Int? with content "2" */
+
+
+var fa1 = [1,2,3,4,5,6]
+
+var fa1m = fa1.flatMap({$0 * 2})
+fa1m /*[Int] with content [2, 4, 6, 8, 10, 12] */
+
+var fao1:[Int?] = [1,2,3,4,nil,6]
+
+var fao1m = fao1.flatMap({$0})
+fao1m /*[Int] with content [1, 2, 3, 4, 6] */
+
+var fa2 = [[1,2],[3],[4,5,6]]
+
+var fa2m = fa2.flatMap({$0})
+fa2m /*[Int] with content [1, 2, 3, 4, 6] */
+
+var fa3:[[Int?]] = [[1,2],[3],[nil,4,5]]
+
+var fa3m = fa3.flatMap {$0}.flatMap {$0}
+fa3m
 
 
 

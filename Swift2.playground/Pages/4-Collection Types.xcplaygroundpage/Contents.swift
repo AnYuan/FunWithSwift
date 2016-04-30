@@ -83,6 +83,16 @@ squared
 //        return result
 //    }
 //}
+
+//extension Array {
+//    func map2<U>(transform: Element -> U) -> [U] {
+//        return reduce([]) {
+//            $0 + [transform($1)]
+//        }
+//    }
+//}
+//let sqr = [1,2,3].map2{$0 * $0}
+//sqr
 //
 //extension Array {
 //    func flatMap<U>(transform: Element->[U]) -> [U] {
@@ -173,6 +183,7 @@ if let airportName = airports["DUB"] {
 
 
 airports["APL"] = "Apple International"
+airports
 airports["APL"] = nil
 airports
 
@@ -200,6 +211,10 @@ extension Dictionary {
             self.merge(sequence)
     }
 }
+
+let defaultAlarms = (1..<5).map {("Alarm \($0)", false)}
+let alarmsDictionary = Dictionary(defaultAlarms)
+alarmsDictionary
 
 //map value
 extension Dictionary {
@@ -239,12 +254,92 @@ oddDigits.intersect(evenDigits).sort()
 oddDigits.subtract(singleDigitPrimeNumbers).sort()
 oddDigits.exclusiveOr(singleDigitPrimeNumbers).sort()
 
+extension SequenceType where Generator.Element: Hashable {
+    func unique() -> [Generator.Element] {
+        var seen: Set<Generator.Element> = []
+        return filter {
+            if seen.contains($0) {
+                return false
+            } else {
+                seen.insert($0)
+                return true
+            }
+        }
+    }
+}
+
+
+var mySet = Set<String>()
+mySet
+
+mySet.insert("a")
+mySet.insert("b")
+mySet.insert("a")
+mySet.insert("d")
+mySet.insert("b")
+
+mySet.insert("c")
+mySet.unique()
+
+let uniqueArray = [1,2,3,4,2,3,6,3].unique()
+
+//:Collection Protocols
+
+//Generator
+struct FibsGenerator: GeneratorType {
+    var state = (0,1)
+    mutating func next() -> Int? {
+        let upcomingNumber = state.0
+        state = (state.1, state.0 + state.1)
+        return upcomingNumber
+    }
+}
+
+var fibG = FibsGenerator()
+fibG.next()
+fibG.next()
+fibG.next()
+fibG.next()
+fibG.next()
+
+
+let seq = 0.stride(to: 9, by: 1)
+var g1 = seq.generate()
+g1.next()
+g1.next()
+
+var g2 = g1
+
+g1.next()
+g1.next()
+g2.next()
+g2.next()
+
+
+var g3 = AnyGenerator(g1)
+
+g3.next()
+g1.next()
+g3.next()
+g3.next()
+
+//Sequences
+func fibGenerator() -> AnyGenerator<Int> {
+    var state = (0, 1)
+    return AnyGenerator {
+        let result = state.0
+        state = (state.1, state.0 + state.1)
+        return result
+    }
+}
+
+let fibSeq = AnySequence(fibGenerator)
 
 
 //:Designing a protocol for queues
 protocol QueueType {
     //The type of elements held in 'self'
-    typealias Element
+    associatedtype Element
     
     //enqueue 'newElement' to 'self'
     mutating func enqueue(newElement: Element)
@@ -280,12 +375,14 @@ struct Queue<Element> {
     }
 }
 
+
+//MARK: Conforming to CollectionType
 extension Queue: CollectionType {
     var startIndex: Int { return 0 }
     var endIndex: Int { return left.count + right.count }
     
     subscript(idx: Int) -> Element {
-        guard idx < endIndex else { fatalError("Index out of bounds") }
+        precondition((0..<endIndex).contains(idx), "Index out of bounds")
         if idx < left.endIndex {
             return left[left.count - idx.successor()]
         } else {
@@ -321,7 +418,7 @@ q.first                     // "1"
 q.last                      // "3"
 
 
-
+//MARK: ArrayLiteralConvertible
 extension Queue: ArrayLiteralConvertible {
     init(arrayLiteral elements: Element...) {
         self.left = elements.reverse()
@@ -331,6 +428,7 @@ extension Queue: ArrayLiteralConvertible {
 
 let qq: Queue = [1,2,3]
 
+//MARK: RangeReplaceableCollectionType
 extension Queue: RangeReplaceableCollectionType {
     mutating func reserveCapacity(n: Int) {
         return
@@ -344,6 +442,8 @@ extension Queue: RangeReplaceableCollectionType {
     }
 }
 
+
+//Indices
 /// A simple linked list enum
 enum List<Element> {
     /// The end of a list
@@ -365,7 +465,7 @@ let l = List<Int>.End.cons(1).cons(2).cons(3)
 /// A LIFO stack type with constant-time push and pop operations
 protocol StackType {
     /// The type of element held stored in the stack
-    typealias Element
+    associatedtype Element
     
     /// Pushes `x` onto the top of `self`
     ///
@@ -384,8 +484,7 @@ extension Array: StackType {
     }
     
     mutating func pop() -> Element? {
-        guard !isEmpty else { return nil }
-        return removeLast()
+        return self.popLast()
     }
 }
 
@@ -424,12 +523,14 @@ stack.pop() // 4
 stack.pop() // 2
 stack.pop() // 1
 
+
+//MARK: SequenceType
 extension List: SequenceType {
     func generate() -> AnyGenerator<Element> {
         // declare a variable to capture that
         // tracks progression through the list:
         var current = self
-        return anyGenerator {
+        return AnyGenerator {
             // next() will pop, returning nil
             // when the list is empty:
             current.pop()
@@ -457,7 +558,7 @@ ll.elementsEqual(["1","2","3"])  // true
 
 
 let standardIn = AnySequence {
-    return anyGenerator {
+    return AnyGenerator {
         readLine()
     }
 }

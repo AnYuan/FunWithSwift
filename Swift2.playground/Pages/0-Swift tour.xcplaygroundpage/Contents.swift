@@ -81,12 +81,12 @@ repeat {
 print(m)
 
 //functions and closures
-func greet(name: String, day: String) -> String {
+func greet(_ name: String, day: String) -> String {
     return "Hello \(name), today is \(day)."
 }
 greet("Anyuan", day: "Tuesday")
 
-func sumOf(numbers: Int...) -> Int {
+func sumOf(_ numbers: Int...) -> Int {
     var sum = 0
     for number in numbers {
         sum += number
@@ -98,8 +98,8 @@ sumOf(42,23,23)
 
 
 
-func makeIncrementer() -> (Int -> Int) {
-    func addOne(number: Int) -> Int {
+func makeIncrementer() -> ((Int) -> Int) {
+    func addOne(_ number: Int) -> Int {
         return 1 + number
     }
     return addOne
@@ -108,7 +108,7 @@ var increment = makeIncrementer()
 increment(7)
 
 
-func hasAnyMatches(list:[Int], condition:Int -> Bool) -> Bool {
+func hasAnyMatches(_ list:[Int], condition:(Int) -> Bool) -> Bool {
     for item in list {
         if condition(item) {
             return true
@@ -117,7 +117,7 @@ func hasAnyMatches(list:[Int], condition:Int -> Bool) -> Bool {
     return false
 }
 
-func lessThanTen(number: Int) -> Bool {
+func lessThanTen(_ number: Int) -> Bool {
     return number < 20
 }
 var numbers = [20,19,7,12]
@@ -133,25 +133,25 @@ let maps = [1,2,3].map({
 })
 
 print(maps)
-let sortedNumbers = numbers.sort{$0 > $1}
+let sortedNumbers = numbers.sorted{$0 > $1}
 print(sortedNumbers)
 
 //objects and class
 
 //enum and structures
 enum Rank : Int {
-    case Ace = 1
-    case Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten
-    case Jack, Queen, King
+    case ace = 1
+    case two, three, four, five, six, seven, eight, nine, ten
+    case jack, queen, king
     func simpleDes() -> String {
         switch self {
-        case .Ace:
+        case .ace:
             return "ace"
-        case .Jack:
+        case .jack:
             return "jack"
-        case .Queen:
+        case .queen:
             return "queen"
-        case .King:
+        case .king:
             return "king"
         default:
             return String(self.rawValue)
@@ -159,7 +159,7 @@ enum Rank : Int {
     }
 }
 
-let ace = Rank.Ace
+let ace = Rank.ace
 let aceRawValue = ace.rawValue
 
 if let convertedRank = Rank(rawValue: 11) {
@@ -167,44 +167,181 @@ if let convertedRank = Rank(rawValue: 11) {
 }
 
 //Mon, 19 Oct 2015 03:05:37 GMT
-let dateFormat = NSDateFormatter()
-let gmt = NSTimeZone(abbreviation: "GMT")
+let dateFormat = DateFormatter()
+let gmt = TimeZone(abbreviation: "GMT")
 dateFormat.timeZone = gmt
 //dateFormat.dateStyle = .MediumStyle
 //dateFormat.timeStyle = .LongStyle
 
 dateFormat.dateFormat = "E, dd MMM yyyy H:mm:SS z"
 
-dateFormat.stringFromDate(NSDate())
+dateFormat.string(from: Date())
+
+
+protocol Arbitrary {
+    static func arbitrary() -> Self
+}
+
+extension Int: Arbitrary {
+    static func arbitrary() -> Int {
+        return Int(arc4random())
+    }
+}
+
+
+Int.arbitrary()
+
+func tabulate<A>(_ times: Int, transform: (Int) -> A) -> [A] {
+    return (0 ..< times).map(transform)
+}
+
+extension Int {
+    static func random(_ from: Int, to: Int) -> Int{
+        return from + (Int(arc4random()) % (to - from))
+    }
+}
+
+extension Character: Arbitrary {
+    static func arbitrary() -> Character {
+        return Character(UnicodeScalar(Int.random(65,to:90)))
+    }
+}
+
+extension String: Arbitrary {
+    static func arbitrary() -> String {
+        let randomLength = Int.random(0, to: 40)
+        let randomChracters = tabulate(randomLength) {
+            _ in Character.arbitrary()
+        }
+        return String(randomChracters)
+    }
+}
+
+String.arbitrary()
+
+
+
+
+(0 ..< 10).map{print($0)}
+
+struct Point {
+    var x: Int
+    var y: Int
+}
+
+var structPoint = Point(x: 1, y: 2)
+var sameStructPoint = structPoint
+sameStructPoint.x = 3
+
+
+var mutablePoint = Point(x: 1, y: 1)
+mutablePoint.x = 3
+print(mutablePoint)
+
+var arr = [1,2,5]
+arr.removeAll()
+let res = arr.first.flatMap {
+    arr.reduce($0, combine: max)
+}
+res
+
+enum Result<T> {
+    case success(T)
+    case failure(ErrorProtocol)
+}
+
+
+let seq = 0.stride(to: 9, by: 1)
+var g1 = seq.makeIterator()
+g1.next()
+g1.next()
+
+var g2 = g1
+g1.next()
+g1.next()
+g2.next()
+g2.next()
+
+var g3 = AnyIterator(g1)
+
+g3.next()
+g1.next()
+g3.next()
+g3.next()
+g1.next()
+
+
+class PropertyQuiz {
+    var property: String = "1" {
+        willSet {
+            self.property = "2"
+        }
+        didSet {
+            self.property = "3"
+        }
+    }
+    
+    init() { }
+}
+
+class PropertySubQuiz: PropertyQuiz {
+    
+    override var property: String {
+        get {
+            return super.property
+        }
+//        set { } // case 1
+        set { super.property = "6" } // case 2
+    }
+    
+    override init() {
+        super.init()
+        self.property = "4"
+        config()
+    }
+    
+    func config() {
+        self.property = "5"
+    }
+}
+
+let subQuiz = PropertySubQuiz()
+print(subQuiz.property)
 
 
 
 
 
 
+var a3 = Array(1..<10)
+var a4 = a3[1..<3]
+a3[1] = 10
+a4
 
 
 
+var filename = "hi.5.4.dmg.abc"
+
+var array = filename.components(separatedBy: ".")
+
+//filename
+if array.count <= 2 {
+    array.removeFirst()
+} else if array.count > 2{
+    array.removeLast()
+    let result = array.joined(separator: ".")
+}
+
+var filename1 = "dmg.abc.pdf"
+var array1 = filename1.components(separatedBy: ".")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//file ext
+if array1.count > 1 {
+    array1.removeLast()
+} else {
+    ""
+}
 
 
 

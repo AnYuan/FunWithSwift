@@ -12,14 +12,14 @@ var str = "Hello, playground"
 class Counter {
     var count = 0
     func increment() {
-        ++count
+        count += 1
     }
     
-    func incrementBy(amount: Int) {
+    func incrementBy(_ amount: Int) {
         count += amount
     }
     
-    func incrementBy(amount: Int, numberOfTimes:Int) {
+    func incrementBy(_ amount: Int, numberOfTimes:Int) {
         count += amount * numberOfTimes
     }
     
@@ -37,7 +37,7 @@ counter.reset()
 //:Modifying value Types from within instance method
 struct Point {
     var x = 0.0, y = 0.0
-    mutating func moveByX(deltaX: Double, y deltaY: Double) {
+    mutating func moveByX(_ deltaX: Double, y deltaY: Double) {
         x += deltaX
         y += deltaY
     }
@@ -56,27 +56,27 @@ let fixedPoint = Point(x: 3.0, y: 3.0)
 //:mutating methods can assign an entirely new instance to the implicit self property. The Point example shown above could have been written in the following way insead:
 struct Point_self {
     var x = 0.0, y = 0.0
-    mutating func moveByX(deltaX: Double, y deltaY: Double) {
+    mutating func moveByX(_ deltaX: Double, y deltaY: Double) {
         self = Point_self(x: x + deltaX, y: y + deltaY)
     }
 }
 
 
 enum TriStateSwitch {
-    case Off, Low, High
+    case off, low, high
     mutating func next() {
         switch self {
-        case Off:
-            self = Low
-        case Low:
-            self = High
-        case High:
-            self = Off
+        case off:
+            self = low
+        case low:
+            self = high
+        case high:
+            self = off
         }
     }
 }
 
-var ovenLight = TriStateSwitch.Low
+var ovenLight = TriStateSwitch.low
 ovenLight.next()
 ovenLight.next()
 
@@ -94,19 +94,19 @@ SomeClass.someTypeMethod()
 
 struct LevelTracker {
     static var highestUnlockedLevel = 1
-    static func unlockLevel(level: Int) {
+    static func unlockLevel(_ level: Int) {
         if level > highestUnlockedLevel {
             highestUnlockedLevel = level
         }
     }
     
-    static func levelIsUnlocked(level:Int) -> Bool {
+    static func levelIsUnlocked(_ level:Int) -> Bool {
         return level <= highestUnlockedLevel
     }
     
     var currentLevel = 1
     
-    mutating func advanceToLevel(level:Int) -> Bool {
+    mutating func advanceToLevel(_ level:Int) -> Bool {
         if LevelTracker.levelIsUnlocked(level) {
             currentLevel = level
             return true
@@ -119,7 +119,7 @@ struct LevelTracker {
 class Player {
     var tracker = LevelTracker()
     let playerName: String
-    func completedLevel(level: Int) {
+    func completedLevel(_ level: Int) {
         LevelTracker.unlockLevel(level + 1)
         tracker.advanceToLevel(level + 1)
     }

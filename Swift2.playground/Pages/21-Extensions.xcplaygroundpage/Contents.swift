@@ -82,7 +82,7 @@ extension Rect {
 
 //:Methods
 extension Int {
-    func repetitions(task: () -> Void) {
+    func repetitions(_ task: () -> Void) {
         for _ in 0..<self {
             task()
         }
@@ -111,11 +111,12 @@ someInt.square()
 
 //:Subscripts
 extension Int {
-    subscript(var digitIndex: Int) -> Int {
+    subscript(digitIndex: Int) -> Int {
+        var digitIndex = digitIndex
         var decimalBase = 1
         while digitIndex > 0 {
             decimalBase *= 10
-            --digitIndex
+            digitIndex -= 1
         }
         return (self / decimalBase) % 10
     }
@@ -127,28 +128,28 @@ extension Int {
 //:Nested types
 extension Int {
     enum Kind {
-        case Negative, Zero, Positive
+        case negative, zero, positive
     }
     var kind: Kind {
         switch self {
         case 0:
-            return .Zero
+            return .zero
         case let x where x > 0:
-            return .Positive
+            return .positive
         default:
-            return .Negative
+            return .negative
         }
     }
 }
 
-func printIntegerKinds(numbers: [Int]) {
+func printIntegerKinds(_ numbers: [Int]) {
     for number in numbers {
         switch number.kind {
-        case .Negative:
+        case .negative:
             print("- ", appendNewline: false)
-        case .Zero:
+        case .zero:
             print("0 ", appendNewLine: false)
-        case .Positive:
+        case .positive:
             print("+ ", appendNewLine: false)
         }
     }

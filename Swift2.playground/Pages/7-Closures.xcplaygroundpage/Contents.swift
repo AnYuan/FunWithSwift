@@ -14,30 +14,30 @@ var str = "Hello, playground"
 * Closure expressions are unnamed closures written in a lightweight syntax that can capture values from their surrounding context.
 */
 let names = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
-func backwards(s1: String, s2: String) -> Bool {
+func backwards(_ s1: String, s2: String) -> Bool {
     return s1 > s2
 }
 
-var reversed = names.sort(backwards)
+var reversed = names.sorted(isOrderedBefore: backwards)
 
-reversed = names.sort({(s1: String, s2: String) -> Bool in
+reversed = names.sorted(isOrderedBefore: {(s1: String, s2: String) -> Bool in
     return s1 > s2
 })
 
 //: Inferring Type From Context
-reversed = names.sort({s1, s2 in return s1 > s2})
+reversed = names.sorted(isOrderedBefore: {s1, s2 in return s1 > s2})
 
 //: Implicit Returns from single-expression closures
-reversed = names.sort({s1, s2 in s1 > s2})
+reversed = names.sorted(isOrderedBefore: {s1, s2 in s1 > s2})
 
 //: Shorthand Argument Names
-reversed = names.sort({$0 > $1})
+reversed = names.sorted(isOrderedBefore: {$0 > $1})
 
 //: Operator Functions
-reversed = names.sort(>)
+reversed = names.sorted(isOrderedBefore: >)
 
 //: Trailing Closures
-func someFunctionThatTakesAClosure(closure:() -> Void) {
+func someFunctionThatTakesAClosure(_ closure:() -> Void) {
     //function body goes here
 }
 
@@ -53,11 +53,11 @@ someFunctionThatTakesAClosure() {
     //trailing closure's body goes here
 }
 
-reversed = names.sort(){
+reversed = names.sorted(){
     $0 > $1
 }
 
-reversed = names.sort{
+reversed = names.sorted{
     $0 > $1
 }
 
@@ -65,7 +65,7 @@ let digitNames = [0:"zero", 1:"one", 2:"two", 3:"three", 4:"four",
     5:"five", 6:"six", 7:"seven", 8:"eight", 9:"nine"]
 let numbers = [16,58,510]
 let strings = numbers.map {
-    (var number) -> String in
+    (number) -> String in
     var output = ""
     while number > 0 {
         output = digitNames[number % 10]! + output
@@ -76,7 +76,7 @@ let strings = numbers.map {
 
 //:Capturing Values
 //:nested function
-func makeIncrementer(forIncrement amount: Int) -> Void -> Int
+func makeIncrementer(forIncrement amount: Int) -> (Void) -> Int
 {
     var runningTotal = 0
     

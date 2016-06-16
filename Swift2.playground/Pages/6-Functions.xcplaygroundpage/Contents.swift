@@ -6,7 +6,7 @@ var str = "Hello, playground"
 
 //: [Next](@next)
 
-func sayHello(personName: String) -> String {
+func sayHello(_ personName: String) -> String {
     return "Hello, " + personName + "!"
 }
 
@@ -16,7 +16,7 @@ sayHello("anyuan")
 //Function Parameters and Return Values
 
 //Multiple Input Parameters
-func halfOpenRangeLength(start start: Int, end: Int) -> Int {
+func halfOpenRangeLength(start: Int, end: Int) -> Int {
     return end - start
 }
 
@@ -29,7 +29,7 @@ parameter list. This ensures that all calls to the function use
 the same order for their nondefault arguments, and makes it clear
 that the same function is being called in each case.
 */
-func someFunction(parameterWithDefault: Int = 12) {
+func someFunction(_ parameterWithDefault: Int = 12) {
     print("value is \(parameterWithDefault)")
 }
 
@@ -37,7 +37,7 @@ someFunction()
 
 someFunction(5)
 
-func twoDefaultParameters(parameterOne: Int = 1, parameterTwo: Int = 2) {
+func twoDefaultParameters(_ parameterOne: Int = 1, parameterTwo: Int = 2) {
     print("one is \(parameterOne) and two is \(parameterTwo)")
 }
 
@@ -52,7 +52,7 @@ cannot be marked as inout. If you mark a parameter as inout, it cannot
 also be marked as var or let.
 */
 
-func swapTwoInts(inout a: Int, inout _ b: Int) {
+func swapTwoInts(_ a: inout Int, _ b: inout Int) {
     let temporaryA = a
     a = b
     b = temporaryA
@@ -66,15 +66,15 @@ anotherInt
 
 
 //:Function Types as Return Types
-func stepForward(input: Int) -> Int {
+func stepForward(_ input: Int) -> Int {
     return input + 1
 }
 
-func stepBackward(input: Int) -> Int {
+func stepBackward(_ input: Int) -> Int {
     return input - 1
 }
 
-func chooseStepFunction(backwards: Bool) -> (Int) -> Int {
+func chooseStepFunction(_ backwards: Bool) -> (Int) -> Int {
     return backwards ? stepBackward : stepForward
 }
 

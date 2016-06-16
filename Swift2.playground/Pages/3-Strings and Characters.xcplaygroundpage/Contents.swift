@@ -30,19 +30,19 @@ word += "\u{301}"
 
 let greeting = "Guten Tag"
 greeting[greeting.startIndex]
-greeting[greeting.endIndex.predecessor()]
-greeting[greeting.startIndex.successor()]
-let index = greeting.startIndex.advancedBy(7)
+greeting[greeting.characters.index(before: greeting.endIndex)]
+greeting[greeting.characters.index(after: greeting.startIndex)]
+let index = greeting.characters.index(greeting.startIndex, offsetBy: 7)
 greeting[index]
 
 var welcome = "hello"
-welcome.insert("!", atIndex: welcome.endIndex)
-welcome.insertContentsOf(" there".characters, at: welcome.endIndex.predecessor())
-welcome.removeAtIndex(welcome.endIndex.predecessor())
+welcome.insert("!", at: welcome.endIndex)
+welcome.insert(contentsOf: " there".characters, at: welcome.index(before: welcome.endIndex))
+welcome.remove(at: welcome.index(before: welcome.endIndex))
 welcome
 
-let range = welcome.endIndex.advancedBy(-6)..<welcome.endIndex
-welcome.removeRange(range)
+let range = welcome.index(welcome.endIndex, offsetBy: -6)..<welcome.endIndex
+welcome.removeSubrange(range)
 
 let quotation = "We're a lot alike, you and I."
 let sameQuotation = "We're a lot alike, you and I."

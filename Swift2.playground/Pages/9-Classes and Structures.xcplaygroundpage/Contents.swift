@@ -63,12 +63,12 @@ cinema.width = 2048
 hd.width
 //enum
 enum CompassPoint {
-    case North, South, East, West
+    case north, south, east, west
 }
-var currentDirection = CompassPoint.West
+var currentDirection = CompassPoint.west
 let rememberedDirection = currentDirection
-currentDirection = .East
-if rememberedDirection == .West {
+currentDirection = .east
+if rememberedDirection == .west {
     print("west")
 }
 

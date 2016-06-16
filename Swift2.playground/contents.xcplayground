@@ -27,6 +27,5 @@
         <page name='23-Generics'/>
         <page name='24-Access Control'/>
         <page name='25-Advanced Operators'/>
-        <page name='26-Result'/>
     </pages>
 </playground>

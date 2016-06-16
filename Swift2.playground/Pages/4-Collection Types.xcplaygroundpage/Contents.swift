@@ -11,8 +11,8 @@ print(someInts.count)
 
 someInts.append(3)
 
-var threeDoubles = [Double](count: 3, repeatedValue: 0.0)
-var anotherThreeDoubles = [Double](count: 3, repeatedValue: 2.5)
+var threeDoubles = [Double](repeating: 0.0, count: 3)
+var anotherThreeDoubles = [Double](repeating: 2.5, count: 3)
 
 var sixDoubles = threeDoubles + anotherThreeDoubles
 
@@ -29,13 +29,13 @@ shoppingList += ["Baking Powder"]
 shoppingList += ["Chocolate Spread", "Cheese", "Butter"]
 var firstItem = shoppingList.first
 shoppingList[4...6] = ["Bananas", "Apples"]
-shoppingList.insert("Maple Syrup", atIndex: 0)
-let mapleSyrup = shoppingList.removeAtIndex(0)
+shoppingList.insert("Maple Syrup", at: 0)
+let mapleSyrup = shoppingList.remove(at: 0)
 for item in shoppingList {
     print(item)
 }
 
-for (index, value) in shoppingList.enumerate() {
+for (index, value) in shoppingList.enumerated() {
     print("Item \(index + 1): \(value)")
 }
 
@@ -54,7 +54,7 @@ let s_fibs = fibs.map {$0 * $0}
 s_fibs
 
 extension Array {
-    func accumulate<U>(initial: U, combine:(U,Element) -> U) -> [U] {
+    func accumulate<U>(_ initial: U, combine:(U,Element) -> U) -> [U] {
         var running = initial
         return self.map {
             next in
@@ -121,7 +121,7 @@ let allCombinations = suits.flatMap { suit in
 allCombinations
 
 
-fibs.indexOf(2)
+fibs.index(of: 2)
 
 //:filter
 let a = fibs.filter{$0 % 2 == 0}
@@ -195,8 +195,8 @@ for (airportCode, airportName) in airports {
 //Useful extension for Dictionary
 //merge two dics
 extension Dictionary {
-    mutating func merge<S: SequenceType
-        where S.Generator.Element == (Key,Value)>(other: S) {
+    mutating func merge<S: Sequence
+        where S.Iterator.Element == (Key,Value)>(_ other: S) {
             for (k,v) in other {
                 self[k] = v
             }
@@ -205,8 +205,8 @@ extension Dictionary {
 
 //init with (key,value)
 extension Dictionary {
-    init<S: SequenceType
-        where S.Generator.Element == (Key,Value)>(_ sequence: S) {
+    init<S: Sequence
+        where S.Iterator.Element == (Key,Value)>(_ sequence: S) {
             self = [:]
             self.merge(sequence)
     }
@@ -218,7 +218,7 @@ alarmsDictionary
 
 //map value
 extension Dictionary {
-    func mapValues<NewValue>(transform: Value -> NewValue)
+    func mapValues<NewValue>(_ transform: (Value) -> NewValue)
         -> [Key:NewValue] {
             return Dictionary<Key, NewValue>(map { (key,value) in
                 return (key, transform(value))
@@ -239,7 +239,7 @@ favoriteGenres.insert("Jazz")
 favoriteGenres.remove("Rock")
 
 favoriteGenres.contains("Jazz")
-favoriteGenres.sort()
+favoriteGenres.sorted()
 favoriteGenres
 
 
@@ -248,15 +248,15 @@ let oddDigits: Set = [1,3,5,7,9]
 let evenDigits: Set = [0,2,4,6,8]
 let singleDigitPrimeNumbers: Set = [2,3,5,7]
 
-oddDigits.union(evenDigits).sort()
+oddDigits.union(evenDigits).sorted()
 
-oddDigits.intersect(evenDigits).sort()
-oddDigits.subtract(singleDigitPrimeNumbers).sort()
-oddDigits.exclusiveOr(singleDigitPrimeNumbers).sort()
+oddDigits.intersection(evenDigits).sorted()
+oddDigits.subtracting(singleDigitPrimeNumbers).sorted()
+oddDigits.symmetricDifference(singleDigitPrimeNumbers).sorted()
 
-extension SequenceType where Generator.Element: Hashable {
-    func unique() -> [Generator.Element] {
-        var seen: Set<Generator.Element> = []
+extension Sequence where Iterator.Element: Hashable {
+    func unique() -> [Iterator.Element] {
+        var seen: Set<Iterator.Element> = []
         return filter {
             if seen.contains($0) {
                 return false
@@ -286,7 +286,7 @@ let uniqueArray = [1,2,3,4,2,3,6,3].unique()
 //:Collection Protocols
 
 //Generator
-struct FibsGenerator: GeneratorType {
+struct FibsGenerator: IteratorProtocol {
     var state = (0,1)
     mutating func next() -> Int? {
         let upcomingNumber = state.0
@@ -304,7 +304,7 @@ fibG.next()
 
 
 let seq = 0.stride(to: 9, by: 1)
-var g1 = seq.generate()
+var g1 = seq.makeIterator()
 g1.next()
 g1.next()
 
@@ -316,7 +316,7 @@ g2.next()
 g2.next()
 
 
-var g3 = AnyGenerator(g1)
+var g3 = AnyIterator(g1)
 
 g3.next()
 g1.next()
@@ -324,9 +324,9 @@ g3.next()
 g3.next()
 
 //Sequences
-func fibGenerator() -> AnyGenerator<Int> {
+func fibGenerator() -> AnyIterator<Int> {
     var state = (0, 1)
-    return AnyGenerator {
+    return AnyIterator {
         let result = state.0
         state = (state.1, state.0 + state.1)
         return result
@@ -342,7 +342,7 @@ protocol QueueType {
     associatedtype Element
     
     //enqueue 'newElement' to 'self'
-    mutating func enqueue(newElement: Element)
+    mutating func enqueue(_ newElement: Element)
     
     //dequeue an element from 'self'
     mutating func dequeue() -> Element?
@@ -357,7 +357,7 @@ struct Queue<Element> {
     }
     
     /// Add an element to the back of the queue in O(1).
-    mutating func enqueue(element: Element) {
+    mutating func enqueue(_ element: Element) {
         right.append(element)
     }
     
@@ -368,8 +368,8 @@ struct Queue<Element> {
             else { return nil }
         
         if left.isEmpty {
-            left = right.reverse()
-            right.removeAll(keepCapacity: true)
+            left = right.reversed()
+            right.removeAll(keepingCapacity: true)
         }
         return left.removeLast()
     }
@@ -377,14 +377,14 @@ struct Queue<Element> {
 
 
 //MARK: Conforming to CollectionType
-extension Queue: CollectionType {
+extension Queue: Collection {
     var startIndex: Int { return 0 }
     var endIndex: Int { return left.count + right.count }
     
     subscript(idx: Int) -> Element {
         precondition((0..<endIndex).contains(idx), "Index out of bounds")
         if idx < left.endIndex {
-            return left[left.count - idx.successor()]
+            return left[left.count - (idx + 1)]
         } else {
             return right[idx - left.count]
         }
@@ -401,11 +401,11 @@ for x in ["1","2","foo","3"] {
 for s in q { print(s) }     // prints 1 2 foo 3
 
 // pass queues to methods that take sequences
-q.joinWithSeparator(",")    // "1,2,foo,3"
+q.joined(separator: ",")    // "1,2,foo,3"
 let aa = Array(q)            // aa = ["1","2","foo","3]
 
 // call methods that extend SequenceType
-q.map { $0.uppercaseString} // ["1","2","FOO","3"]
+q.map { $0.uppercased()} // ["1","2","FOO","3"]
 q.flatMap { Int($0) }       // [1,2,3]
 q.filter {                  // ["foo"]
     $0.characters.count > 1
@@ -421,7 +421,7 @@ q.last                      // "3"
 //MARK: ArrayLiteralConvertible
 extension Queue: ArrayLiteralConvertible {
     init(arrayLiteral elements: Element...) {
-        self.left = elements.reverse()
+        self.left = elements.reversed()
         self.right = []
     }
 }
@@ -429,16 +429,16 @@ extension Queue: ArrayLiteralConvertible {
 let qq: Queue = [1,2,3]
 
 //MARK: RangeReplaceableCollectionType
-extension Queue: RangeReplaceableCollectionType {
-    mutating func reserveCapacity(n: Int) {
+extension Queue: RangeReplaceableCollection {
+    mutating func reserveCapacity(_ n: Int) {
         return
     }
     
-    mutating func replaceRange<C : CollectionType where C.Generator.Element == Element>
-        (subRange: Range<Int>, with newElements: C) {
-            right = left.reverse() + right
-            left.removeAll(keepCapacity: true)
-            right.replaceRange(subRange, with: newElements)
+    mutating func replaceSubrange<C : Collection where C.Iterator.Element == Element>
+        (_ subRange: Range<Int>, with newElements: C) {
+            right = left.reversed() + right
+            left.removeAll(keepingCapacity: true)
+            right.replaceSubrange(subRange, with: newElements)
     }
 }
 
@@ -447,20 +447,20 @@ extension Queue: RangeReplaceableCollectionType {
 /// A simple linked list enum
 enum List<Element> {
     /// The end of a list
-    case End
-    indirect case Node(Element, next: List<Element>)
+    case end
+    indirect case node(Element, next: List<Element>)
 }
 
 extension List {
     /// Return a new list by prepending a node
     /// with value `x` to the front of a list.
-    func cons(x: Element) -> List {
-        return .Node(x, next: self)
+    func cons(_ x: Element) -> List {
+        return .node(x, next: self)
     }
 }
 
 // a 3-element list, of (3 2 1)
-let l = List<Int>.End.cons(1).cons(2).cons(3)
+let l = List<Int>.end.cons(1).cons(2).cons(3)
 
 /// A LIFO stack type with constant-time push and pop operations
 protocol StackType {
@@ -470,7 +470,7 @@ protocol StackType {
     /// Pushes `x` onto the top of `self`
     ///
     /// - Complexity: Amortized O(1).
-    mutating func push(x: Element)
+    mutating func push(_ x: Element)
     /// Removes the topmost element of `self` and returns it,
     /// or `nil` if `self` is empty.
     ///
@@ -479,7 +479,7 @@ protocol StackType {
 }
 
 extension Array: StackType {
-    mutating func push(x: Element) {
+    mutating func push(_ x: Element) {
         self.append(x)
     }
     
@@ -489,14 +489,14 @@ extension Array: StackType {
 }
 
 extension List: StackType {
-    mutating func push(x: Element) {
+    mutating func push(_ x: Element) {
         self = self.cons(x)
     }
     
     mutating func pop() -> Element? {
         switch self {
-        case .End: return nil
-        case let .Node(x, next: xs):
+        case .end: return nil
+        case let .node(x, next: xs):
             self = xs
             return x
         }
@@ -504,7 +504,7 @@ extension List: StackType {
 }
 
 
-var stack = List<Int>.End.cons(1).cons(2).cons(3)
+var stack = List<Int>.end.cons(1).cons(2).cons(3)
 var aaa = stack
 var bbb = stack
 
@@ -525,12 +525,12 @@ stack.pop() // 1
 
 
 //MARK: SequenceType
-extension List: SequenceType {
-    func generate() -> AnyGenerator<Element> {
+extension List: Sequence {
+    func makeIterator() -> AnyIterator<Element> {
         // declare a variable to capture that
         // tracks progression through the list:
         var current = self
-        return AnyGenerator {
+        return AnyIterator {
             // next() will pop, returning nil
             // when the list is empty:
             current.pop()
@@ -540,7 +540,7 @@ extension List: SequenceType {
 
 extension List: ArrayLiteralConvertible {
     init(arrayLiteral elements: Element...) {
-        self = elements.reverse().reduce(.End) {
+        self = elements.reversed().reduce(.end) {
             $0.cons($1)
         }
     }
@@ -551,19 +551,19 @@ for x in ll {
     print("\(x) ", terminator: "")
 }
 
-ll.joinWithSeparator(",")        // "1,2,3"
+ll.joined(separator: ",")        // "1,2,3"
 ll.contains("2")                 // true
 ll.flatMap { Int($0) }           // [1,2,3]
 ll.elementsEqual(["1","2","3"])  // true
 
 
 let standardIn = AnySequence {
-    return AnyGenerator {
+    return AnyIterator {
         readLine()
     }
 }
 
-let numberedStdIn = standardIn.enumerate()
+let numberedStdIn = standardIn.enumerated()
 for (i, line) in numberedStdIn {
     print("\(i+1): \(line)")
 }
@@ -592,22 +592,22 @@ for (i, line) in numberedStdIn {
 
 /// Private implementation detail of the List collection
 private enum ListNode<Element> {
-    case End
-    indirect case Node(Element, tag: Int, next: ListNode<Element>)
+    case end
+    indirect case node(Element, tag: Int, next: ListNode<Element>)
     
     /// Computed property to fetch the tag. .End has an
     /// implicit tag of zero.
     var tag: Int {
         switch self {
-        case .End: return 0
-        case let .Node(_, tag: n, _):
+        case .end: return 0
+        case let .node(_, tag: n, _):
             return n
         }
     }
     
-    func cons(x: Element) -> ListNode<Element> {
+    func cons(_ x: Element) -> ListNode<Element> {
         // each cons increments the tag by one
-        return .Node(x, tag: tag+1, next: self)
+        return .node(x, tag: tag+1, next: self)
     }
 }
 
@@ -620,12 +620,12 @@ public struct ListIndex<Element> {
 
 assert(sizeof(ListNode<Int>) == sizeof(ListIndex<Int>))
 
-extension ListIndex: ForwardIndexType {
+extension ListIndex: Comparable {
     public func successor() -> ListIndex<Element> {
         switch node {
-        case .End:
+        case .end:
             fatalError("cannot increment endIndex")
-        case let .Node(_, _, next: next):
+        case let .node(_, _, next: next):
             return ListIndex(node: next)
         }
     }
@@ -636,7 +636,7 @@ public func == <T>(lhs: ListIndex<T>, rhs: ListIndex<T>) -> Bool {
 }
 
 
-public struct List_n<Element>: CollectionType {
+public struct List_n<Element>: Collection {
     // Index's type could be inferred, but it helps make the
     // rest of the code clearer:
     public typealias Index = ListIndex<Element>
@@ -646,8 +646,8 @@ public struct List_n<Element>: CollectionType {
     
     public subscript(idx: Index) -> Element {
         switch idx.node {
-        case .End: fatalError("Subscript out of range")
-        case let .Node(x, _, _): return x
+        case .end: fatalError("Subscript out of range")
+        case let .node(x, _, _): return x
         }
     }
 }
@@ -655,16 +655,16 @@ public struct List_n<Element>: CollectionType {
 
 extension List_n: ArrayLiteralConvertible {
     public init(arrayLiteral elements: Element...) {
-        startIndex = ListIndex(node: elements.reverse().reduce(.End) {
+        startIndex = ListIndex(node: elements.reversed().reduce(.end) {
             $0.cons($1)
             })
-        endIndex = ListIndex(node: .End)
+        endIndex = ListIndex(node: .end)
     }
 }
 
 let lll: List_n = ["one", "two", "three"]
 lll.first
-lll.indexOf("two")
+lll.index(of: "two")
 
 extension List_n {
     public var count: Int {

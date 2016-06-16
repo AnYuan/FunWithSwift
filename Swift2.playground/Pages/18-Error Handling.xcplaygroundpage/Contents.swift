@@ -6,10 +6,10 @@ var str = "Hello, playground"
 
 //: [Next](@next)
 //:Error Handling
-enum VendingMachineError: ErrorType {
-    case InvalidSelection
-    case InsufficientFunds(required: Double)
-    case OutOfStock
+enum VendingMachineError: ErrorProtocol {
+    case invalidSelection
+    case insufficientFunds(required: Double)
+    case outOfStock
 }
 
 //:Throwing Errors
@@ -31,20 +31,20 @@ var amountDeposited = 1.00
 
 func vend(itemNamed name: String) throws {
     guard var item = inventory[name] else {
-        throw VendingMachineError.InvalidSelection
+        throw VendingMachineError.invalidSelection
     }
     
     guard item.count > 0 else {
-        throw VendingMachineError.OutOfStock
+        throw VendingMachineError.outOfStock
     }
     
     if amountDeposited >= item.price {
         amountDeposited -= item.price
-        --item.count
+        item.count -= 1
         inventory[name] = item
     } else {
         let amountRequired = item.price - amountDeposited
-        throw VendingMachineError.InsufficientFunds(required: amountRequired)
+        throw VendingMachineError.insufficientFunds(required: amountRequired)
     }
 }
 
@@ -56,7 +56,7 @@ let favoriteSnacks = [
     "Bob":"Licorice",
     "Eve":"Pretzels"
 ]
-func buyFavoriteSnack(person: String) throws {
+func buyFavoriteSnack(_ person: String) throws {
     let snackName = favoriteSnacks[person] ?? "Candy Bar"
     try vend(itemNamed: snackName)
 }
@@ -71,11 +71,11 @@ func buyFavoriteSnack(person: String) throws {
 
 do {
     try vend(itemNamed: "Candy Bar")
-} catch VendingMachineError.InvalidSelection {
+} catch VendingMachineError.invalidSelection {
     print("Invalid selection")
-} catch VendingMachineError.OutOfStock {
+} catch VendingMachineError.outOfStock {
     print("out of stock.")
-} catch VendingMachineError.InsufficientFunds(let amountRequired) {
+} catch VendingMachineError.insufficientFunds(let amountRequired) {
     print("insufficent funds")
 }
 

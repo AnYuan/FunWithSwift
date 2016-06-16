@@ -67,12 +67,12 @@ do {
 var dict :[String:String?] = [:]
 // first try
 dict = ["key": "value"]
-dict["key"] = Optional<Optional<String>>.None
+dict["key"] = Optional<Optional<String>>.none
 dict
 
 // second try
 dict = ["key": "value"]
-dict["key"] = Optional<String>.None
+dict["key"] = Optional<String>.none
 dict
 
 // third try

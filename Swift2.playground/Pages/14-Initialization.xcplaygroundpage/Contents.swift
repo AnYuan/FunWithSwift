@@ -307,7 +307,7 @@ if anonymousCreature == nil {
 
 //:Failable Initializers for Enumerations with Raw Values
 enum TemperatureUnit: Character {
-    case Kelvin = "K", Celsius = "C", Fahrenheit = "F"
+    case kelvin = "K", celsius = "C", fahrenheit = "F"
 }
 
 let unknownUnit = TemperatureUnit(rawValue: "X")
@@ -410,7 +410,7 @@ struct Checkerboard {
         }
         return temporaryBoard
     }()
-    func squareIsBlackAtRow(row: Int, column: Int) -> Bool {
+    func squareIsBlackAtRow(_ row: Int, column: Int) -> Bool {
         return boardColors[(row * 10) + column]
     }
 }

@@ -12,55 +12,55 @@ enum SomeEnumeration {
 }
 
 enum CompassPoint {
-    case Noreth, South, East, West
+    case noreth, south, east, west
 }
 
-var directionToHead = CompassPoint.West
-directionToHead = .East
+var directionToHead = CompassPoint.west
+directionToHead = .east
 
 //: Matching Enumeration Values with a Switch Statement
 
 //: a switch statement must be exhaustive when considering an enumeration's members.
-directionToHead = .South
+directionToHead = .south
 switch directionToHead {
-    case .Noreth:
+    case .noreth:
         print("north")
-    case .South:
+    case .south:
         print("south")
-    case .East:
+    case .east:
         print("east")
-    case .West:
+    case .west:
         print("west")
 }
 
 
 //: Associated Values
 enum Barcode {
-    case UPCA(Int, Int, Int, Int)
-    case QRCode(String)
+    case upca(Int, Int, Int, Int)
+    case qrCode(String)
 }
 
-var productBarcode = Barcode.UPCA(8, 85909, 51225, 3)
+var productBarcode = Barcode.upca(8, 85909, 51225, 3)
 switch productBarcode {
-case .UPCA(let numberSystem, let manufacturer, let product, let check):
+case .upca(let numberSystem, let manufacturer, let product, let check):
     print("UPC-A: \(numberSystem), \(manufacturer), \(product), \(check)")
-case .QRCode(let productCode):
+case .qrCode(let productCode):
     print("QR code: \(productCode)")
 }
 
 switch productBarcode {
-case let .UPCA(numberSystem, manufacturer, product, check):
+case let .upca(numberSystem, manufacturer, product, check):
     print("UPC-A: \(numberSystem), \(manufacturer), \(product), \(check)")
-case let .QRCode(productCode):
+case let .qrCode(productCode):
     print("QR code: \(productCode)")
 }
 
 
 //: Raw Values
 enum ASCIIControlCharacter: Character {
-    case Tab = "\t"
-    case LineFeed = "\n"
-    case CarriageReturn = "\r"
+    case tab = "\t"
+    case lineFeed = "\n"
+    case carriageReturn = "\r"
 }
 
 /*: note that raw values are not the same as associated values.
@@ -70,10 +70,10 @@ value for a particular enumeration member is always the same. Associated
 values are set when you create a new constant or variable based on one of the enumeration's members, and can be different each time you do so.
 */
 enum Planet: Int {
-    case Mercury = 1, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
+    case mercury = 1, venus, earth, mars, jupiter, saturn, uranus, neptune
 }
 
-let earthsOrder = Planet.Earth.rawValue
+let earthsOrder = Planet.earth.rawValue
 import UIKit
 //: the raw value initializer always returns optional enumeration member
 let possiblePlanet = Planet(rawValue: 7)

@@ -24,12 +24,13 @@ A deinitializer can access all properties of the instance it is called on and ca
 
 struct Bank {
     static var coinsInBank = 10_000
-    static func vendCoins(var numberOfCoinsToVend: Int) -> Int {
+    static func vendCoins(_ numberOfCoinsToVend: Int) -> Int {
+        var numberOfCoinsToVend = numberOfCoinsToVend
         numberOfCoinsToVend = min(numberOfCoinsToVend, coinsInBank)
         coinsInBank -= numberOfCoinsToVend
         return numberOfCoinsToVend
     }
-    static func receiveCoins(coins: Int) {
+    static func receiveCoins(_ coins: Int) {
         coinsInBank += coins
     }
 }
@@ -40,7 +41,7 @@ class Player {
         coinsInPurse = Bank.vendCoins(coins)
     }
     
-    func winCoins(coins: Int) {
+    func winCoins(_ coins: Int) {
         coinsInPurse += Bank.vendCoins(coins)
     }
     

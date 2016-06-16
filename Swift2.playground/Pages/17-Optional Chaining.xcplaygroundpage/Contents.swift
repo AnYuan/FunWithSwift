@@ -145,44 +145,44 @@ if let mikesStreet = mike.residence?.address?.street {
 //:swich unwrap
 var array = ["one", "two", "three"]
 
-switch array.indexOf("four") {
-case .Some(let idx):
-    array.removeAtIndex(idx)
-case .None:
+switch array.index(of: "four") {
+case .some(let idx):
+    array.remove(at: idx)
+case .none:
     break
 }
 
-switch array.indexOf("four") {
+switch array.index(of: "four") {
 case let idx?:
-    array.removeAtIndex(idx)
+    array.remove(at: idx)
 case nil:
     break
 }
 
 //: if let
-if let idx = array.indexOf("four") {
-    array.removeAtIndex(idx)
+if let idx = array.index(of: "four") {
+    array.remove(at: idx)
 }
 
-if let idx = array.indexOf("four") where idx != array.startIndex {
-    array.removeAtIndex(idx)
+if let idx = array.index(of: "four") where idx != array.startIndex {
+    array.remove(at: idx)
 }
 
 let urlString = "http://www.google.com/images/srpr/logo11w.png"
-if let url = NSURL(string: urlString), data = NSData(contentsOfURL: url), image = UIImage(data: data) {
+if let url = URL(string: urlString), data = try? Data(contentsOf: url), image = UIImage(data: data) {
     let view = UIImageView(image: image)
     XCPShowView("Downloaded image", view: view)
 }
 
-if let url = NSURL(string: urlString) where url.pathExtension == "png",
-    let data = NSData(contentsOfURL: url), image = UIImage(data: data) {
+if let url = URL(string: urlString) where url.pathExtension == "png",
+    let data = try? Data(contentsOf: url), image = UIImage(data: data) {
         let view = UIImageView(image: image)
 }
 
 
 //:while let
 let array_int = [1,2,3]
-var generator = array_int.generate()
+var generator = array_int.makeIterator()
 while let i = generator.next() {
     print(i)
 }
@@ -197,7 +197,7 @@ for f in a {
     print("\(f()) ")
 }
 
-var g = (1...3).generate()
+var g = (1...3).makeIterator()
 var o: Optional<Int> = g.next()
 while o != nil {
     let i = o!
@@ -212,7 +212,7 @@ for maybeInt in maybeInts {
     print(maybeInt)
 }
 
-var generator_ = maybeInts.generate()
+var generator_ = maybeInts.makeIterator()
 while let maybeInt = generator_.next() {
     // maybeInt is an `Int?`
     // three numbers and a `nil`
@@ -228,7 +228,7 @@ for case nil in maybeInts {
 }
 
 //:This uses a "pattern" of x?, which only matches non-nil values. This is shorthand for .Some(x), so the loop could be written like this:
-for case let .Some(i) in maybeInts {
+for case let .some(i) in maybeInts {
 }
 
 /*:
@@ -248,7 +248,7 @@ struct Substring {
 }
 
 func ~=(pattern: Substring, value: String) -> Bool {
-    return value.rangeOfString(pattern.s) != nil
+    return value.range(of: pattern.s) != nil
 }
 
 let s = "bar"
@@ -278,11 +278,11 @@ if var i = Int(s) {
 //}
 
 
-func doStuffWithFileExtension(fileName: String) {
-    guard let period = fileName.characters.indexOf(".")
+func doStuffWithFileExtension(_ fileName: String) {
+    guard let period = fileName.characters.index(of: ".")
         else { return } //must leave the current scope. return or fatalError
     
-    let extensionRange = period.successor()..<fileName.endIndex
+    let extensionRange = <#T##String.CharacterView corresponding to `period`##String.CharacterView#>.index(after: period)..<fileName.endIndex
     let fileExtension = fileName[extensionRange]
     print(fileExtension)
 }
@@ -323,7 +323,7 @@ if let n = i, m = j {
 */
 let s1: String?? = nil
 (s1 ?? "inner") ?? "outer"
-let s2: String?? = .Some(nil)
+let s2: String?? = .some(nil)
 (s2 ?? "inner") ?? "outer"
 s1
 s2

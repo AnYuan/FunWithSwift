@@ -412,7 +412,59 @@ print(hamsters.textualDescription)
 
 
 
+class Social {
+    var twitter: String
+    
+    init(twitter: String) {
+        self.twitter = twitter
+    }
+}
 
+@objc class A_Person: NSObject{
+    var name: String
+    var age: Int
+    var social: Social
+    
+    init(name: String, age: Int, social: Social) {
+        self.name = name
+        self.age = age
+        self.social = social
+    }
+}
+
+extension NSObject {
+    func propertysNames() -> [String]{
+        var count : UInt32 = 0
+        let classToInspect = self.dynamicType
+        let properties : UnsafeMutablePointer <objc_property_t> = class_copyPropertyList(classToInspect, &count)
+        var propertyNames : [String] = []
+        let intCount = Int(count)
+        for i in 0 ..< intCount {
+            let property : objc_property_t = properties[i]
+            let propertyName = NSString(UTF8String: property_getName(property))!
+            propertyNames.append(propertyName as String)
+        }
+        free(properties)
+        return propertyNames
+    }
+}
+extension A_Person: ReflectedStringConvertible {
+    
+}
+
+
+public protocol ReflectedStringConvertible: CustomStringConvertible {}
+extension ReflectedStringConvertible {
+    public var description: String {
+        let mirror = Mirror(reflecting: self)
+        return mirror.children.map {"\($0) : \($1)"}.joinWithSeparator(", ")
+    }
+}
+
+let dd = A_Person(name: "anyuan", age: 18, social: Social(twitter: "@AnYuan"))
+print(dd)
+
+dd.propertysNames()
 
 
 

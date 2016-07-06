@@ -16,11 +16,11 @@ sayHello("anyuan")
 //Function Parameters and Return Values
 
 //Multiple Input Parameters
-func halfOpenRangeLength(start: Int, end: Int) -> Int {
+func halfOpenRangeLength(_ start: Int, end: Int) -> Int {
     return end - start
 }
 
-print(halfOpenRangeLength(start: 1, end: 10))
+print(halfOpenRangeLength(1, end: 10))
 
 //Default Parameter Values
 /*:

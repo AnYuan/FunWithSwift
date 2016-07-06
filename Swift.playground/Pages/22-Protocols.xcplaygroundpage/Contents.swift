@@ -467,5 +467,26 @@ print(dd)
 dd.propertysNames()
 
 
+var dic = ["test":"test", "test2": 1]
+dic["test"]
+dic["test1"] = 1
+dic
+
+
+
+
+protocol HttpClient {
+    var URLString: String { get }
+    var parameters: [String: NSNumber] { get }
+}
+
+class A: NSObject {
+    
+}
+
+struct Request: HttpClient {
+    var URLString = "test"
+    var parameters:[String: NSNumber] = ["test": 1]
+}
 
 

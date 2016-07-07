@@ -251,7 +251,7 @@ enum Result<T> {
 }
 
 
-let seq = 0.stride(to: 9, by: 1)
+let seq = stride(from:0, to: 9, by: 1)
 var g1 = seq.makeIterator()
 g1.next()
 g1.next()

@@ -32,7 +32,7 @@ protocol CalendarViewDelegate {
 struct Event {
     let title: String
     let date: NSDate
-    let durationInSeconds: NSTimeInterval
+    let durationInSeconds: TimeInterval
 }
 
 extension Event: HasDate {}
@@ -50,11 +50,11 @@ class MyCalendarView: UIView {
     
     func setupViews() {
         let displayedEvents = events.filter {
-            displayRange.contains($0.date)
+            displayRange.contains(date: $0.date)
         }
         
         for event in displayedEvents {
-            addEventView(event)
+            addEventView(event: event)
         }
     }
     
@@ -77,7 +77,7 @@ protocol CalendarView {
 
 extension CalendarView where EventType: HasDate {
     var eventsInRange: [EventType] {
-        return events.filter {displayRange.contains($0.date)}
+        return events.filter {displayRange.contains(date: $0.date)}
     }
 }
 
@@ -88,11 +88,11 @@ struct TextCalendarView: CalendarView {
     var events:[Event] = []
     
     func display() {
-        let formatter = NSDateFormatter()
-        formatter.dateStyle = .ShortStyle
-        formatter.timeStyle = .ShortStyle
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
         for event in eventsInRange {
-            print("\(formatter.stringFromDate(event.date)):\(event.title)")
+            print("\(formatter.string(from: event.date as Date)):\(event.title)")
         }
         
     }
@@ -142,8 +142,8 @@ protocol EventLike {
 extension Event: EventLike {
     
     func overlapsWith(other: Event) -> Bool {
-        return date.timeIntervalSinceDate(other.date) < durationInSeconds ||
-        other.date.timeIntervalSinceDate(date) < other.durationInSeconds
+        return date.timeIntervalSince(other.date as Date) < durationInSeconds ||
+        other.date.timeIntervalSince(date as Date) < other.durationInSeconds
     }
 }
 
@@ -197,7 +197,7 @@ stringStorer.getStored()
 
 // Protocol Internals
 
-extension SignedNumberType {
+extension SignedNumber {
     var myAbs: Self {
         if self < 0 {
             return -self
@@ -216,8 +216,8 @@ func takesProtocol(x: CustomStringConvertible) {
     print(sizeofValue(x))
 }
 
-takesProtocol(4)
-takesProtocol("string")
+takesProtocol(x: 4)
+takesProtocol(x: "string")
 
 
 func takesPlaceholder<T: CustomStringConvertible>(x: T) {
@@ -228,14 +228,14 @@ func takesPlaceholder<T: CustomStringConvertible>(x: T) {
 }
 
 
-takesPlaceholder(1 as Int64)
+takesPlaceholder(x: 1 as Int64)
 class MyClass: CustomStringConvertible {
     var description: String {
         return "\(MyClass.self)"
     }
 }
 
-takesPlaceholder(MyClass())
+takesPlaceholder(x: MyClass())
 
 
 extension CustomStringConvertible {
@@ -253,7 +253,7 @@ func dumpCustomStringConvertible(c: CustomStringConvertible) {
     //you cloud also do this with unsafeBitCast
     withUnsafePointer(&p) { (ptr) -> Void in
         let intPtr = UnsafePointer<Int>(ptr)
-        for i in 0.stride(to: sizeof(CustomStringConvertible)/8, by: 1) {
+        for i in stride(from: 0, to: sizeof(CustomStringConvertible.self)/8, by: 1) {
             print("\(i):\t 0x\(String(intPtr[i], radix: 16))")
         }
     }
@@ -261,7 +261,7 @@ func dumpCustomStringConvertible(c: CustomStringConvertible) {
 
 
 let ii = Int(0xb1ab1ab1a)
-dumpCustomStringConvertible(i)
+dumpCustomStringConvertible(c: i)
 
 
 //Performance Implications
@@ -299,9 +299,9 @@ struct ConstantGenerator: NumberGeneratorType {
 func generateUsingProtocol(g: NumberGeneratorType, count: Int) -> Int {
     let start = NSDate()
     var generator = g
-    return 0.stride(to: count, by: 1).reduce(0) {
+    return stride(from: 0, to: count, by: 1).reduce(0) {
         total, _ in
-        let end = NSDate().timeIntervalSinceDate(start)
+        let end = NSDate().timeIntervalSince(start as Date)
         print(end)
         return total &+ generator.generateNumber()
 
@@ -310,7 +310,7 @@ func generateUsingProtocol(g: NumberGeneratorType, count: Int) -> Int {
 
 func generateUsingGeneric<T: NumberGeneratorType>(g: T, count: Int) -> Int {
     var generator = g
-    return 0.stride(to: count, by: 1).reduce(0) {
+    return stride(from: 0, to: count, by: 1).reduce(0) {
         total, _ in
         return total &+ generator.generateNumber()
     }
@@ -321,8 +321,8 @@ func generateUsingGeneric<T: NumberGeneratorType>(g: T, count: Int) -> Int {
 //generateUsingGeneric(RandomGenerator(), count: 10000)
 //generateUsingGeneric(ConstantGenerator(constant:0), count: 10000)
 
-sizeof(String)
-sizeof(Any)
+sizeof(String.self)
+sizeof(Any.self)
 
 
 class C {}
@@ -331,12 +331,12 @@ class D: C {}
 let d = D()
 let c: C = d
 
-unsafeBitCast(d, UnsafePointer<Void>.self)
-unsafeBitCast(c, UnsafePointer<Void>.self)
+unsafeBitCast(d, to: UnsafePointer<Void>.self)
+unsafeBitCast(c, to: UnsafePointer<Void>.self)
 
 func f(cs: [C]) {}
 let ds = [D(), D()]
-f(ds)
+f(cs: ds)
 
 protocol P {}
 extension C: P {}

@@ -27,5 +27,8 @@
         <page name='23-Generics'/>
         <page name='24-Access Control'/>
         <page name='25-Advanced Operators'/>
+        <page name='26-Result'/>
+        <page name='27-Protocols'/>
+        <page name='28-Optional'/>
     </pages>
 </playground>

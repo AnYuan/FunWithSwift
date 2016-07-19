@@ -67,3 +67,83 @@ extension Array {
     }
 }
 array.reduce(+)
+
+//extension Optional {
+//    func map<U>(transform: (Wrapped) -> U) -> U? {
+//        if let value = self {
+//            return transform(value)
+//        }
+//        return nil
+//    }
+//}
+
+let x = stringNumbers.first.map {Int($0)}//Int??
+
+stringNumbers.flatMap {Int($0)}
+             .reduce(0, combine: +)
+
+
+var dicWithNils: [String: Int?] = ["one":1, "two":2, "none":nil]
+dicWithNils["two"] = nil//remove key "two"
+dicWithNils
+
+dicWithNils["two"] = Optional(nil)
+dicWithNils
+
+dicWithNils["two"] = nil//remove key "two"
+dicWithNils
+
+dicWithNils["two"] = .some(nil)
+dicWithNils
+
+dicWithNils["two"] = nil//remove key "two"
+dicWithNils
+
+dicWithNils["two"]? = nil
+dicWithNils
+
+
+dicWithNils["three"]? = nil
+dicWithNils.index(forKey: "three")
+
+dicWithNils
+
+
+let a:[Int?] = [1,2,nil]
+let b:[Int?] = [1,2,nil]
+
+func ==<Element: Equatable>(lhs:[Element], rhs:[Element]) -> Bool {
+    return true
+}
+
+func ==<T: Equatable>(lhs:[T?], rhs:[T?]) -> Bool {
+    return lhs.elementsEqual(rhs) { $0 == $1 }
+}
+
+//not supported for now
+//extension Optional: Equatable where T: Equatable{
+//    
+//}
+
+a == b
+
+
+//:switch-case Matching for Optionals
+func ~=<T:Equatable>(pattern:T?, value:T?) -> Bool {
+    return pattern == value
+}
+
+//func ~=<I:Interval>(pattern:I, value:I.Bound?) -> Bool {
+//    return value.map{ pattern.contains($0)} ?? false
+//}
+
+
+
+
+
+
+
+
+
+
+

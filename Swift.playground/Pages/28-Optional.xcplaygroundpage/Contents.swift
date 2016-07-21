@@ -133,9 +133,54 @@ func ~=<T:Equatable>(pattern:T?, value:T?) -> Bool {
     return pattern == value
 }
 
-//func ~=<I:Interval>(pattern:I, value:I.Bound?) -> Bool {
+//func ~=<I:ClosedInterval>(pattern:I, value:I.Bound?) -> Bool {
 //    return value.map{ pattern.contains($0)} ?? false
 //}
+
+//:Improving Force-Unwrap Error Messages
+infix operator !! {}
+
+func !!<T>(wrapped:T?, failureText:@autoclosure ()->String) -> T {
+    if let x = wrapped {return x}
+    fatalError(failureText())
+}
+
+let s = "1"
+
+//let i = Int(s) !! "Expecting integer, got \"\(s)\""
+
+infix operator !? {}
+func !?<T:IntegerLiteralConvertible>(wrapped:T?, failureText:@autoclosure ()->String) -> T {
+    assert(wrapped != nil, failureText())
+    return wrapped ?? 0
+}
+
+let j = Int(s) !? "Expecting integer, got \"\(s)\""
+
+func !?<T:ArrayLiteralConvertible>(wrapped:T?, failureText:@autoclosure ()->String) -> T {
+    assert(wrapped != nil, failureText())
+    return wrapped ?? []
+}
+
+func !?<T:StringLiteralConvertible>(wrapped:T?, failureText:@autoclosure ()->String) -> T {
+    assert(wrapped != nil, failureText())
+    return wrapped ?? ""
+}
+
+func !?<T>(wrapped:T?, nilDefault: @autoclosure ()-> (value: T, text: String)) -> T {
+    assert(wrapped != nil, nilDefault().text)
+    return wrapped ?? nilDefault().value
+}
+
+func !?(wrapped:()?, failureText: @autoclosure ()-> String) {
+    assert(wrapped != nil, failureText)
+}
+
+var ss: String! = "Hello"
+ss?.isEmpty
+if let ss = ss { print(ss) }
+ss = nil
+ss ?? "GoodBye"
 
 
 

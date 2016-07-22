@@ -167,61 +167,73 @@ extension UserDefaults: Storage {
     }
 }
 
-class Player {
-    let health: Health
+typealias PropertyList = [String: AnyObject]
+
+struct Player {
+    var health: Health
     var chocolates: BoxOfChocolates?
-    let storage: Storage
     
-    init(storage: Storage = UserDefaults.standard) {
-        self.storage = storage
-        self.health = Health(storage: storage)
+    init(properties: PropertyList = [:]) {
+        let healthProperties = properties["health"] as? PropertyList
+        self.health = Health(properties: healthProperties ?? [:])
+        if let chocolateProperties = properties["chocolates"] as? PropertyList {
+            chocolates = BoxOfChocolates(properties: chocolateProperties)
+        }
+    }
+    
+    mutating func study() {
+        health.foodPoints -= 2
+        health.experiencePoints += 1
+    }
+    
+    func serialize() -> PropertyList {
+        var result: PropertyList = [
+            "health": health.serialize()
+        ]
+        result["chocolates"] = chocolates?.serialize()
+        return result
     }
 }
 
-class Health {
-    var foodPoints: Int = 100 {
-        didSet { save() }
+struct Health {
+    var foodPoints: Int = 100
+    
+    var experiencePoints: Int = 0
+    
+    init(properties: PropertyList) {
+        foodPoints = properties["food"] as? Int ?? foodPoints
+        experiencePoints = properties["experience"] as? Int ?? experiencePoints
     }
     
-    var experiencePoints: Int = 0 {
-        didSet { save() }
-    }
-    
-    var storage: Storage
-    
-    init(storage: Storage) {
-        self.storage = storage
-        foodPoints = storage["player.health"] ?? foodPoints
-        experiencePoints = storage["player.experience"] ?? experiencePoints
-    }
-    
-    func save() {
-        storage["player.health"] = foodPoints
-        storage["player.experience"] = experiencePoints
+    func serialize() -> PropertyList {
+        return [
+            "food": foodPoints,
+            "experience": experiencePoints
+        ]
     }
 }
 
-class BoxOfChocolates {
-    private var numnberOfChocolates: Int = 10 {
-        didSet { save() }
-    }
-    
-    var storage: Storage
-    
-    init(storage: Storage) {
-        self.storage = storage
-        numnberOfChocolates = storage["player.chocolates"] ?? numnberOfChocolates
-    }
-    
-    func eat(player: Player) {
-        numnberOfChocolates -= 1
-        player.health.foodPoints = min(100, player.health.foodPoints + 10)
-    }
-    
-    func save() {
-        storage["player.chocolates"] = numnberOfChocolates
+extension Player {
+    mutating func eat() {
+        guard let count = self.chocolates?.numnberOfChocolates , count > 0 else {
+            return
+        }
+        self.chocolates?.numnberOfChocolates -= 1
+        health.foodPoints = min(100, health.foodPoints + 10)
     }
 }
 
-
+struct BoxOfChocolates {
+    private var numnberOfChocolates: Int = 10
+    
+    init(properties: PropertyList) {
+        numnberOfChocolates = properties["chocolates"] as? Int ?? numnberOfChocolates
+    }
+    
+    func serialize() -> PropertyList {
+        return [
+            "chocolates": numnberOfChocolates
+        ]
+    }
+}
 

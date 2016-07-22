@@ -152,14 +152,14 @@ vc = nil
 
 
 //: Case Study: Game Design with Structs
-protocol Storage {
-    subscript(name: String) -> Int? { get set }
+protocol Serializer {
+    subscript(name: String) -> PropertyList? { get set }
 }
 
-extension UserDefaults: Storage {
-    subscript(name: String) -> Int? {
+extension UserDefaults: Serializer {
+    subscript(name: String) -> PropertyList? {
         get {
-            return (object(forKey: name) as? NSNumber)?.intValue
+            return (object(forKey: name) as? PropertyList)
         }
         set {
             set(newValue, forKey: name)
@@ -234,6 +234,22 @@ struct BoxOfChocolates {
         return [
             "chocolates": numnberOfChocolates
         ]
+    }
+}
+
+class GameState {
+    var player: Player {
+        didSet { save() }
+    }
+    var serializer: Serializer
+    
+    init(serializer: Serializer = UserDefaults.standard) {
+        self.serializer = serializer
+        player = Player(properties: serializer["player"] ?? [:])
+    }
+    
+    func save() {
+        serializer["player"] = player.serialize()
     }
 }
 

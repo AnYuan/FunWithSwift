@@ -92,4 +92,42 @@ print(h())
 print(h())
 
 
+//: computed properties and subscripts
+struct File {
+    let path: String
+    
+    private var cachedSize: Int?
+    
+    lazy var size: Int? = {
+        let fm = FileManager.default
+        guard let dict = try? fm.attributesOfItem(atPath: self.path),
+        let size = dict["NSFileSize" as FileAttributeKey] as? Int
+        else { return nil }
+        return size
+    }()
+    
+    mutating func cachedComputeSize() -> Int? {
+        guard cachedSize == nil else { return cachedSize!}
+        let fm = FileManager.default
+        guard let dict = try? fm.attributesOfItem(atPath: self.path),
+        let size = dict["NSFileSize" as FileAttributeKey] as? Int
+        else { return nil}
+        cachedSize = size
+        return size
+    }
+}
+
+extension File {
+    var data: NSData? {
+        get {
+            return NSData(contentsOfFile:path)
+        }
+        set {
+            let theData = newValue ?? NSData()
+            theData.write(toFile: path, atomically: true)
+        }
+        
+    }
+}
+
 

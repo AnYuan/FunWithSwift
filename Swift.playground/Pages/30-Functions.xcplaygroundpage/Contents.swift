@@ -41,7 +41,7 @@ myFunc
 //: Functions as Delegates
 protocol Observable {
     associatedtype Event
-    mutating func register<O: Observer where O.Event == Event>(observer: O)
+    mutating func register(observer: (Event) -> ())
 }
 
 protocol Observer {
@@ -58,9 +58,8 @@ struct StringEventReceiver: Observer {
 
 struct StringEventGenerator: Observable {
     var observers: [(String)-> ()] = []
-    typealias Event = String
-    mutating func register<O : Observer where O.Event == String>(observer: O) {
-        observers.append{observer.receive($0)}
+    mutating func register(observer: (String) -> ()) {
+        observers.append(observer)
     }
     
     func fireEvents(_ event: String) {

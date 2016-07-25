@@ -131,3 +131,43 @@ extension File {
 }
 
 
+//: Automatic Closures and Memory
+func and(_ l: Bool, _ r: () -> Bool) -> Bool {
+    guard l else { return false }
+    return r()
+}
+
+if and(true, { return false}) {
+    //Perform some work
+}
+
+
+func and(_ l: Bool, _ r: @autoclosure () -> Bool) -> Bool {
+    guard l else { return false }
+    return r()
+}
+
+if and(true, false) {
+    //Perform some work
+}
+
+
+//: The noescape Annotation
+// @noescape transform: (Self.Generator.Element) throws -> T
+// this is a signal to both the compiler and to callers of the method that the closure will not escape the scope of map. In other words: once map is done, the closure is not referenced any longer. There are no asynchronous callbacks that will call the transform closure, nor are there any global variable or properties storing the closure. This is all statically verified by the compiler.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

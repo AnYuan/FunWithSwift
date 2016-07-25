@@ -31,5 +31,6 @@
         <page name='27-Protocols'/>
         <page name='28-Optional'/>
         <page name='29-Structs and Classes'/>
+        <page name='30-Functions'/>
     </pages>
 </playground>

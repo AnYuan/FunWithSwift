@@ -69,5 +69,27 @@ struct StringEventGenerator: Observable {
     }
 }
 
+//: inout parameters and mutating methods
+func inc(_ i: inout Int) {
+    i = i + 1
+}
+
+var x = 0
+inc(&x)
+x
+
+func inc_f() -> () -> Int {
+    var i = 0
+    return {
+        i += 1
+        return i
+    }
+}
+
+
+let h = inc_f()
+print(h())
+print(h())
+
 
 

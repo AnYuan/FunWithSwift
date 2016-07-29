@@ -32,5 +32,6 @@
         <page name='28-Optional'/>
         <page name='29-Structs and Classes'/>
         <page name='30-Functions'/>
+        <page name='31-Strings'/>
     </pages>
 </playground>

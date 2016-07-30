@@ -161,6 +161,33 @@ Regex("^h..lo*!$").match("hellooooooo!")
 
 
 
+//: StringLiteralConvertible
+extension Regex: StringLiteralConvertible {
+    public init(stringLiteral value: String) {
+        regexp = value
+    }
+    
+    public init(extendedGraphemeClusterLiteral value: String) {
+        self = Regex(stringLiteral: value)
+    }
+    
+    public init(unicodeScalarLiteral value: String) {
+        self = Regex(stringLiteral: value)
+    }
+}
+
+
+let r:Regex = "^h..lo*!$"
+
+func findMatches(strings: [String], regex: Regex) -> [String] {
+    return strings.filter { regex.match($0) }
+}
+
+findMatches(strings: ["foo","bar","baz"], regex: "^b..")
+
+typealias StringLiteralType = StaticString
+
+let what = "hello"
 
 
 

@@ -185,11 +185,61 @@ func findMatches(strings: [String], regex: Regex) -> [String] {
 
 findMatches(strings: ["foo","bar","baz"], regex: "^b..")
 
-typealias StringLiteralType = StaticString
+//typealias StringLiteralType = StaticString
 
-let what = "hello"
+//let what = "hello"
 
 
+
+
+//:Internal Structure of String
+print(sizeof(String.self))
+
+let hello = "hello"
+let bits = unsafeBitCast(hello, to: _StringCore.self)
+print(bits)
+
+struct StringCoreClone {
+    var _baseAddress: OpaquePointer
+    var _countAndFlags: UInt
+    var _owner: AnyObject?
+}
+
+let clone = unsafeBitCast(bits, to: StringCoreClone.self)
+print(clone._countAndFlags)
+//extra UnsafePointer init to convert from pointed-to-type of Void to Int8
+puts(UnsafePointer(clone._baseAddress))
+
+let emoji = "Hello, 🌐"
+let emojiBits = unsafeBitCast(emoji, to: StringCoreClone.self)
+
+extension StringCoreClone {
+    var count: Int {
+        let mask = 0b11 << UInt(sizeof(UInt.self)*8 - 2)
+        return Int(_countAndFlags & ~mask)
+    }
+}
+
+emoji._core.count
+
+let buf = UnsafeBufferPointer(start: UnsafePointer<UInt16>(emojiBits._baseAddress),
+                              count: emojiBits.count)
+
+var gen = buf.makeIterator()
+var utf16 = UTF16()
+while case let .scalarValue(scalar) = utf16.decode(&gen) {
+    print(scalar, terminator:"")
+}
+
+//var greeting_v = "hello"
+//greeting_v.append(contentsOf: " world")
+//let greetingBits = unsafeBitCast(greeting_v, to: StringCoreClone.self)
+
+let ns = "hello" as NSString
+let ss = ns as String
+let (_,_, owner) = unsafeBitCast(ss, to: (UInt, UInt, NSString).self)
+print(owner)
+owner === ns
 
 
 

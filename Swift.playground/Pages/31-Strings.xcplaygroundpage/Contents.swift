@@ -251,6 +251,31 @@ sizeof(Character.self)
 
 
 
+//:Code Unit Views
+
+//this will break the string apart at every non-alphanumeric character
+extension String {
+    func words(splitBy: NSCharacterSet = .alphanumerics) -> [String] {
+        return self.utf16.split {
+            !splitBy.characterIsMember($0)
+        }.flatMap(String.init)
+    }
+}
+
+let sentence = "Wow! This contains _all_ kinds of things like 123 and \"quotes\"?"
+let array = sentence.words()
+
+
+//extension String.UTF16Index: Strideable {
+//    
+//}
+
+//let helloWorld = "Hello, world!"
+//if let idx = helloWorld.utf16.search("world".utf16)?.samePositionIn(helloWorld) {
+//    print(helloWorld[idx..<helloWorld.endIndex])
+//}
+
+
 
 
 

@@ -291,6 +291,55 @@ extension Queue: CustomStringConvertible, CustomDebugStringConvertible {
     }
 }
 
+//:Streamable and OutputStreamType
+extension Queue: Streamable {
+    func write<Target : OutputStream>(to target: inout Target) {
+        print("[", separator: "", terminator: "", to: &target)
+        print("a", separator: ",", terminator: "", to: &target)
+        print("]", separator: "", terminator: "", to: &target)
+    }
+}
+
+//var ssss = ""
+//let q:Array = [1,2,3]
+//q.write(to: &ssss)
+//
+//print(s)
+
+//TODO: DO NOT KNOW WHY CRASH - Start
+//struct ArrayStream: OutputStream {
+//    var buf: [String] = []
+//    mutating func write(_ string: String) {
+//        buf.append(string)
+//    }
+//}
+//
+//extension NSMutableData: OutputStream {
+//    public func write(_ string: String) {
+//        string.nulTerminatedUTF8.dropLast().withUnsafeBufferPointer {
+//            self.append($0.baseAddress!, length: $0.count)
+//        }
+//    }
+//}
+//
+//struct SlowStreamer: Streamable, ArrayLiteralConvertible {
+//    let contents: [String]
+//    init(arrayLiteral elements: Self.Element...) {
+//        contents = elements
+//    }
+//
+//    func writeTo<Target: OutputStream>(to target: inout Target) {
+//        for x in contents {
+//            print(x, toStream: &target)
+//            sleep(1)
+//        }
+//    }
+//}
+//TODO: DO NOT KNOW WHY CRASH - End
+
+
+
+
 
 
 

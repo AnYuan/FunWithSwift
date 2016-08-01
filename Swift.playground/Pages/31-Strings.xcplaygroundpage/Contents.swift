@@ -338,13 +338,117 @@ extension Queue: Streamable {
 //TODO: DO NOT KNOW WHY CRASH - End
 
 
+//:String Performance
+
+protocol StringViewSelector {
+    associatedtype ViewType: Collection
+    static var caret: ViewType.Iterator.Element { get }
+    static var asterisk: ViewType.Iterator.Element { get }
+    static var period: ViewType.Iterator.Element { get }
+    static var dollar: ViewType.Iterator.Element { get }
+    
+    static func viewFrom(_ s: String) -> ViewType
+}
+
+
+struct UTF8ViewSelector: StringViewSelector {
+    static var caret: UInt8 { return UInt8(ascii: "^") }
+    static var asterisk: UInt8 { return UInt8(ascii: "*") }
+    static var period: UInt8 { return UInt8(ascii: ".") }
+    static var dollar: UInt8 { return UInt8(ascii: "$") }
+
+    static func viewFrom(_ s: String) -> String.UTF8View { return s.utf8 }
+}
+
+struct CharacterViewSelector: StringViewSelector {
+    static var caret: Character { return "^" }
+    static var asterisk: Character { return "*" }
+    static var period: Character { return "." }
+    static var dollar: Character { return "$" }
+    
+    static func viewFrom(_ s: String) -> String.CharacterView { return s.characters }
+}
+
+struct Regex_ <V: StringViewSelector where V.ViewType.Iterator.Element: Equatable, V.ViewType.SubSequence == V.ViewType> {
+    let regexp: String
+    //construct from a regular expression String
+    init(_ regexp: String) {
+        self.regexp = regexp
+    }
+    
+    //returns true if the string argument matches the expression
+    func match(_ text: String) -> Bool {
+        let text = V.viewFrom(text)
+        let regexp = V.viewFrom(self.regexp)
+        
+        //if the regex starts with ^, then it can only match the start
+        //of the input
+        if regexp.first == V.caret {
+            return Regex_.matchHere(regexp.dropFirst(), text)
+        }
+        
+        
+        //otherwise, search for a match at every point in the input
+        //until one is found
+        var idx = text.startIndex
+        while true {
+            if Regex_.matchHere(regexp, text.suffix(from: idx)) {
+                return true
+            }
+            guard idx != text.endIndex else { break }
+            idx = text.index(after: idx)
+        }
+        return false
+    }
+    
+    //match a regular expression string at the beginning of text.
+    static func matchHere(_ regexp: V.ViewType, _ text: V.ViewType) -> Bool {
+        return true
+    }
+    
+    
+    //search for zero or more 'c''s at beginning of text, followed by the remainder of the regular expression.
+    static func matchStar(_ c: Character, _ regexp: String.CharacterView, _ text: String.CharacterView) -> Bool {
+        return false
+    }
+    
+}
 
 
 
+func benchmark<V: StringViewSelector where V.ViewType.Iterator.Element: Equatable, V.ViewType.SubSequence == V.ViewType>(_: V.Type) {
+    let r = Regex_<V>("h..a*")
+    var count = 0
+    
+    let startTime = CFAbsoluteTimeGetCurrent()
+    while let line = readLine() {
+        if r.match(line) { count = count &+ 1}
+    }
+    let totalTime = CFAbsoluteTimeGetCurrent() - startTime
+    print("\(V.self): \(totalTime)")
+}
 
 
+func ~=<T:Equatable>(lhs:T, rhs:T?) -> Bool {
+    return lhs == rhs
+}
+
+//switch Process.arguments.last {
+//case "ch":
+//    benchmark(CharacterViewSelector.self)
+//case "8":
+//    benchmark(UTF8ViewSelector.self)
+//default:
+//    print("unrecognized view type")
+//}
+//
 
 
+//only you can know if your use case justifies choosing your view type based on
+//performance. it's almost certainly the case that these performance characteristics only
+//matter when you are doing extremely heavy string manipulation, but if you are certain
+//that what you are doing would be correct when operating on the UTF-16 data, then this
+//can give you a decent speedup.
 
 
 

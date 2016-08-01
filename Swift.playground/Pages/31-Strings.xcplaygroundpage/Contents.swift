@@ -186,6 +186,9 @@ func findMatches(strings: [String], regex: Regex) -> [String] {
 findMatches(strings: ["foo","bar","baz"], regex: "^b..")
 
 //typealias StringLiteralType = StaticString
+//: Strings and slicing
+let world = "Hello, world!".characters.suffix(6).dropLast()
+print(world)
 
 //let what = "hello"
 
@@ -240,6 +243,11 @@ let ss = ns as String
 let (_,_, owner) = unsafeBitCast(ss, to: (UInt, UInt, NSString).self)
 print(owner)
 owner === ns
+
+
+//:Internal Organization of Character
+sizeof(Character.self)
+//echo ":type lookup Character" | swift | less
 
 
 

@@ -270,10 +270,26 @@ let array = sentence.words()
 //    
 //}
 
+
+//TODO: not work yet
 //let helloWorld = "Hello, world!"
-//if let idx = helloWorld.utf16.search("world".utf16)?.samePositionIn(helloWorld) {
+//if let idx = helloWorld.utf16.index(of:"world".utf16)?.samePosition(in: helloWorld) {
 //    print(helloWorld[idx..<helloWorld.endIndex])
 //}
+
+
+//:CustomStringConvertible and CustomDebugStringConvertible
+struct Queue {}
+
+extension Queue: CustomStringConvertible, CustomDebugStringConvertible {
+    var description: String {
+        return ""
+    }
+    
+    var debugDescription: String {
+        return ""
+    }
+}
 
 
 

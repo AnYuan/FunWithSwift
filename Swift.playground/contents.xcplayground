@@ -32,5 +32,7 @@
         <page name='28-Optional'/>
         <page name='29-Structs and Classes'/>
         <page name='30-Functions'/>
+        <page name='31-Strings'/>
+        <page name='32-Error Handling'/>
     </pages>
 </playground>

@@ -34,5 +34,6 @@
         <page name='30-Functions'/>
         <page name='31-Strings'/>
         <page name='32-Error Handling'/>
+        <page name='33-Generics'/>
     </pages>
 </playground>

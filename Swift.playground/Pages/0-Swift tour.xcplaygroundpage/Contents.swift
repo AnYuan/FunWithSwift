@@ -241,13 +241,13 @@ print(mutablePoint)
 var arr = [1,2,5]
 arr.removeAll()
 let res = arr.first.flatMap {
-    arr.reduce($0, combine: max)
+    arr.reduce($0, max)
 }
 res
 
 enum Result<T> {
     case success(T)
-    case failure(ErrorProtocol)
+    case failure(Error)
 }
 
 

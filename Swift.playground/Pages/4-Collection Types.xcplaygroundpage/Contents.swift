@@ -144,7 +144,7 @@ for num in fibs {
 }
 
 fibs.reduce(0){ total, num in total + num}
-fibs.reduce(0, combine: +)
+fibs.reduce(0, +)
 let fibs_str = fibs.reduce(""){str, num in str + "\(num)\n"}
 fibs_str
 

@@ -9,7 +9,7 @@ var str = "Hello, playground"
 //:Generics
 
 //:Generic Functions
-func swapTwoValues<T>(inout a: T, inout _ b: T) {
+func swapTwoValues<T>(_ a: inout T, _ b: inout T) {
     let tempA = a
     a = b
     b = tempA
@@ -42,7 +42,7 @@ struct IntStack {
 
 struct Stack<T> {
     var items = [T]()
-    mutating func push(item: T) {
+    mutating func push(_ item: T) {
         items.append(item)
     }
     mutating func pop() -> T {
@@ -77,8 +77,8 @@ if let topItem = stackOfStrings.topItem {
 the hypothetical function above has two type parameters. The first type parameter, T, has a type constraint that requires T to be a subclass of SomeClass. The sencond type parameter, U, has a type constraint that requires U to conform to be protocol SomeProtocol.
 */
 
-func findStringIndex(array: [String], _ valueToFind: String) -> Int? {
-    for (index, value) in array.enumerate() {
+func findStringIndex(_ array: [String], _ valueToFind: String) -> Int? {
+    for (index, value) in array.enumerated() {
         if value == valueToFind {
             return index
         }
@@ -93,7 +93,7 @@ if let foundIndex = findStringIndex(strings, "llama") {
 
 
 func findIndex<T: Equatable>(array: [T], _ valueToFind: T) -> Int? {
-    for (index, value) in array.enumerate() {
+    for (index, value) in array.enumerated() {
         if value == valueToFind {
             return index
         }
@@ -103,7 +103,7 @@ func findIndex<T: Equatable>(array: [T], _ valueToFind: T) -> Int? {
 
 //:Associated Types
 protocol Container {
-    typealias ItemType
+    associatedtype ItemType
     mutating func append(item: ItemType)
     var count: Int { get }
     subscript(i: Int) -> ItemType { get }
@@ -111,7 +111,7 @@ protocol Container {
 
 struct IntStack_: Container {
     var items = [Int]()
-    mutating func push(item: Int) {
+    mutating func push(_ item: Int) {
         items.append(item)
     }
     mutating func pop() -> Int {
@@ -135,7 +135,7 @@ this time, the placeholder type parameter T is used as the type of the append(_:
 */
 struct Stack_<T>: Container {
     var items = [T]()
-    mutating func push(item: T) {
+    mutating func push(_ item: T) {
         items.append(item)
     }
     mutating func pop() -> T {

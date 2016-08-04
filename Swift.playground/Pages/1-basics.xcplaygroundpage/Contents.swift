@@ -110,6 +110,3 @@ if let _ = b {
 if let _ = c {
     print("c is not none")
 }
-
-
-Runloop.current()

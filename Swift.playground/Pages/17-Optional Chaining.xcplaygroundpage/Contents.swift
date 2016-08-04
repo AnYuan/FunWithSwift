@@ -2,7 +2,6 @@
 
 import Foundation
 import UIKit
-import XCPlayground
 
 var str = "Hello, playground"
 
@@ -126,7 +125,7 @@ if let firstRoomName = mike.residence?[0].name {
 //:Accessing Subscripts of Optional Type
 var testScrores = ["Dave":[86,82,84], "Bev":[79,94,81]]
 testScrores["Dave"]?[0] = 91
-testScrores["Bev"]?[0]++
+testScrores["Bev"]?[0]
 testScrores["Brain"]?[0] = 82
 
 //:Linking Multiple Levels of Chaining
@@ -164,18 +163,18 @@ if let idx = array.index(of: "four") {
     array.remove(at: idx)
 }
 
-if let idx = array.index(of: "four") where idx != array.startIndex {
+if let idx = array.index(of: "four") , idx != array.startIndex {
     array.remove(at: idx)
 }
 
 let urlString = "http://www.google.com/images/srpr/logo11w.png"
-if let url = URL(string: urlString), data = try? Data(contentsOf: url), image = UIImage(data: data) {
+if let url = URL(string: urlString), let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
     let view = UIImageView(image: image)
-    XCPShowView("Downloaded image", view: view)
+//    Playground.currentPage.liveView = view
 }
 
-if let url = URL(string: urlString) where url.pathExtension == "png",
-    let data = try? Data(contentsOf: url), image = UIImage(data: data) {
+if let url = URL(string: urlString) , url.pathExtension == "png",
+    let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
         let view = UIImageView(image: image)
 }
 
@@ -258,7 +257,8 @@ if case Substring("foo") = s {
 
 //:if var and while var
 if var i = Int(s) {
-    print(++i)
+    i += 1
+    print(i)
 }
 
 //:Scoping of unwrapped optionals
@@ -278,14 +278,14 @@ if var i = Int(s) {
 //}
 
 
-func doStuffWithFileExtension(_ fileName: String) {
-    guard let period = fileName.characters.index(of: ".")
-        else { return } //must leave the current scope. return or fatalError
-    
-    let extensionRange = <#T##String.CharacterView corresponding to `period`##String.CharacterView#>.index(after: period)..<fileName.endIndex
-    let fileExtension = fileName[extensionRange]
-    print(fileExtension)
-}
+//func doStuffWithFileExtension(_ fileName: String) {
+//    guard let period = fileName.characters.index(of: ".")
+//        else { return } //must leave the current scope. return or fatalError
+//    
+//    let extensionRange = String.CharacterView.index(after: period)..<fileName.endIndex
+//    let fileExtension = fileName[extensionRange]
+//    print(fileExtension)
+//}
 
 
 

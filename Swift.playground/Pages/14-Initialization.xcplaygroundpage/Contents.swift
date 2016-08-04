@@ -112,13 +112,13 @@ beetsQuestion.ask()
 beetsQuestion.response = "I also like beets."
 
 //:default initializers
-//class ShoppingListItem {
-//    var name: String?
-//    var quantity = 1
-//    var purchased = false
-//}
+class ShoppingListItem_ {
+    var name: String?
+    var quantity = 1
+    var purchased = false
+}
 
-var item = ShoppingListItem()
+var item = ShoppingListItem_()
 
 //:Initializer Delegation for Value Types
 //:Note that if you define a custom initializer for a value type, you will no longer have access to the default initializer(or the memberwise initializer, if it is a structure) for that type.

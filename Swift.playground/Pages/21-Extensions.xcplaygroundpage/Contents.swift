@@ -146,11 +146,11 @@ func printIntegerKinds(_ numbers: [Int]) {
     for number in numbers {
         switch number.kind {
         case .negative:
-            print("- ", appendNewline: false)
+            print("- ", terminator:"")
         case .zero:
-            print("0 ", appendNewLine: false)
+            print("0 ", terminator:"")
         case .positive:
-            print("+ ", appendNewLine: false)
+            print("+ ", terminator:"")
         }
     }
     print("")

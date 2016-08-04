@@ -6,7 +6,7 @@ var str = "Hello, playground"
 
 //: [Next](@next)
 //:Error Handling
-enum VendingMachineError: ErrorProtocol {
+enum VendingMachineError: Error {
     case invalidSelection
     case insufficientFunds(required: Double)
     case outOfStock

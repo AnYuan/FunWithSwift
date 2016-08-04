@@ -18,23 +18,23 @@ func backwards(_ s1: String, s2: String) -> Bool {
     return s1 > s2
 }
 
-var reversed = names.sorted(isOrderedBefore: backwards)
+var reversed = names.sorted(by: backwards)
 
-reversed = names.sorted(isOrderedBefore: {(s1: String, s2: String) -> Bool in
+reversed = names.sorted(by: {(s1: String, s2: String) -> Bool in
     return s1 > s2
 })
 
 //: Inferring Type From Context
-reversed = names.sorted(isOrderedBefore: {s1, s2 in return s1 > s2})
+reversed = names.sorted(by: {s1, s2 in return s1 > s2})
 
 //: Implicit Returns from single-expression closures
-reversed = names.sorted(isOrderedBefore: {s1, s2 in s1 > s2})
+reversed = names.sorted(by: {s1, s2 in s1 > s2})
 
 //: Shorthand Argument Names
-reversed = names.sorted(isOrderedBefore: {$0 > $1})
+reversed = names.sorted(by: {$0 > $1})
 
 //: Operator Functions
-reversed = names.sorted(isOrderedBefore: >)
+reversed = names.sorted(by: >)
 
 //: Trailing Closures
 func someFunctionThatTakesAClosure(_ closure:() -> Void) {
@@ -64,15 +64,15 @@ reversed = names.sorted{
 let digitNames = [0:"zero", 1:"one", 2:"two", 3:"three", 4:"four",
     5:"five", 6:"six", 7:"seven", 8:"eight", 9:"nine"]
 let numbers = [16,58,510]
-let strings = numbers.map {
-    (number) -> String in
-    var output = ""
-    while number > 0 {
-        output = digitNames[number % 10]! + output
-        number /= 10
-    }
-    return output
-}
+//let strings = numbers.map {
+//    (number) -> String in
+//    var output = ""
+//    while number > 0 {
+//        output = digitNames[number % 10]! + output
+//        number /= 10
+//    }
+//    return output
+//}
 
 //:Capturing Values
 //:nested function

@@ -98,7 +98,7 @@ let negative = -positive
 let alsoPositive = -negative
 
 //:Compound Assignment Operators
-func += (inout left: Vector2D, right: Vector2D) {
+func += ( left: inout Vector2D, right: Vector2D) {
     left = left + right
 }
 
@@ -106,7 +106,7 @@ var original = Vector2D(x: 1.0, y: 2.0)
 let vectorToAdd = Vector2D(x: 3.0, y: 4.0)
 original += vectorToAdd
 
-prefix func ++ (inout vector: Vector2D) -> Vector2D {
+prefix func ++ ( vector: inout Vector2D) -> Vector2D {
     vector += Vector2D(x: 1.0, y: 1.0)
     return vector
 }
@@ -133,7 +133,7 @@ if twoThree == anotherTwoThree {
 //:Custom Operators
 //:new operators are declared at a global level using the operator keyword, and are marked with the prefix, infix or postfix modifiers
 prefix operator +++ {}
-prefix func +++ (inout vector: Vector2D) -> Vector2D {
+prefix func +++ ( vector: inout Vector2D) -> Vector2D {
     vector += vector
     return vector
 }

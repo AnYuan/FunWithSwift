@@ -5,14 +5,14 @@ import Foundation
 var str = "Hello, playground"
 
 //: [Next](@next)
-enum Result<T> {
+enum Result<T, E: Error> {
     case success(T)
-    case failure(Error)
+    case failure(E)
 }
 
 
 extension Result {
-    func map<U>(f: (T) -> U) -> Result<U> {
+    func map<U>(f: (T) -> U) -> Result<U, E> {
         switch self {
         case .success(let t):
             return .success(f(t))
@@ -21,7 +21,7 @@ extension Result {
         }
     }
     
-    func flatMap<U>(f: (T) -> Result<U>) -> Result<U> {
+    func flatMap<U>(f: (T) -> Result<U, E>) -> Result<U, E> {
         switch self {
         case .success(let t):
             return f(t)
@@ -46,8 +46,10 @@ extension Result {
         do {
             let value = try throwingExpression()
             self = .success(value)
-        } catch {
+        } catch let error as E{
             self = .failure(error)
+        } catch {
+            fatalError("catch unknown error")
         }
     }
 }

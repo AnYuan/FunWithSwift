@@ -13,7 +13,25 @@
    *  swift foundation源码，基于OC开源Foudation, NS*.swift源码：```git clone https://github.com/apple/swift-corelibs-foundation.git```
 * 想快速上首swift2.2的可以下载[Xcode Swift 2.2 Snapshot](https://swift.org/builds/xcode/swift-2.2-SNAPSHOT-2015-12-01-a/swift-2.2-SNAPSHOT-2015-12-01-a-osx.pkg), 经过安装后，可以在terminal中```alias swift22="/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin/swift"```, 不但可以启动REPL，还可以使用swift package manager。 注：只有Xcode 7.2可以使用swift 2.2.
 * [swift package manager](https://swift.org/getting-started/#using-the-build-system) 相关示例[代码](https://github.com/apple/example-package-dealer):根据提示只要clone下示例工程，进入文件夹，运行```swift build```即可完成对应依赖工程的下载编译，非常方便，不过目前作者说还只是基础功能，目前还暂不支持iOS,watchOS,tvOS.
+* gyb CollectionAlgorithms.swift.gyb > CollectionAlgorithms.swift
 
+
+
+## Swift source code directory structure
+* /include & /lib: have most of the compiler C++ sources
+* /tools/SourceKit
+* /stdlib: (mostly written in Swift)
+* /stdlib/private: also includes unit test standard library
+* /stdlib/public: the standard library (almost)
+* /stdlib/public/SDK: look behind the curtain
+* /stdlib/public/runtime: where we're going we don't need eyes to see
+* /apinotes: rename types, map selectors...
+* /docs: don't get too excited
+* /unittests: not the unit tests you're looking for
+* /test: unit tests, mostly in Swift
+* /teset/1_stdlib: helpfully named so it runs first
+* /utils: build script, gyb, etc
+* /validation-test: test cases, validates shapes of types, conformances, etc
 
 ## 记录学习Swift的点滴
 

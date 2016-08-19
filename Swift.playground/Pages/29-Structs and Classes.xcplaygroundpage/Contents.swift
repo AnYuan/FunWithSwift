@@ -35,7 +35,7 @@ var filter: CIFilter {
 
 private var filterForWriting: CIFilter {
     get {
-        if !isUniquelyReferencedNonObjC(&boxedFilter) {
+        if !isKnownUniquelyReferenced(&boxedFilter) {
             filter = filter.copy() as! CIFilter
         }
         return filter
@@ -138,7 +138,7 @@ class ViewController {
 }
 
 class Model {
-    var someClosure: (number: Int) -> () = {_ in}
+    var someClosure: (_ number: Int) -> () = {_ in}
     
     deinit {
         print("deinit model")
@@ -167,7 +167,7 @@ extension UserDefaults: Serializer {
     }
 }
 
-typealias PropertyList = [String: AnyObject]
+typealias PropertyList = [String: Any]
 
 struct Player {
     var health: Health
@@ -188,9 +188,9 @@ struct Player {
     
     func serialize() -> PropertyList {
         var result: PropertyList = [
-            "health": health.serialize()
+            "health": health.serialize() as AnyObject
         ]
-        result["chocolates"] = chocolates?.serialize()
+        result["chocolates"] = (chocolates?.serialize())! as PropertyList
         return result
     }
 }
@@ -224,7 +224,7 @@ extension Player {
 }
 
 struct BoxOfChocolates {
-    private var numnberOfChocolates: Int = 10
+    fileprivate var numnberOfChocolates: Int = 10
     
     init(properties: PropertyList) {
         numnberOfChocolates = properties["chocolates"] as? Int ?? numnberOfChocolates
@@ -232,7 +232,7 @@ struct BoxOfChocolates {
     
     func serialize() -> PropertyList {
         return [
-            "chocolates": numnberOfChocolates
+            "chocolates": numnberOfChocolates as AnyObject
         ]
     }
 }
@@ -252,4 +252,92 @@ class GameState {
         serializer["player"] = player.serialize()
     }
 }
+
+
+
+
+//: Structs and mutation in Swift
+
+struct Point {
+    var x: Int
+    var y: Int
+}
+
+let origin = Point(x: 0, y: 0)
+//origin.x = 10 //error
+
+var otherPoint = Point(x: 0, y: 0)
+otherPoint.x += 10
+otherPoint
+
+var thirdPoint = origin
+thirdPoint.x += 10
+print(thirdPoint)
+print(origin)
+
+
+extension Point {
+    static let origin = Point(x: 0, y: 0)
+}
+
+print(Point.origin)
+
+
+struct Size {
+    var width: Int
+    var height: Int
+}
+
+struct Rectangle {
+    var origin: Point
+    var size: Size
+}
+
+
+Rectangle(origin: Point.origin, size: Size(width: 320, height: 480))
+
+extension Rectangle {
+    init(x: Int = 0, y: Int = 0, width: Int, height: Int) {
+        origin = Point(x: x, y: y)
+        size = Size(width: width, height: height)
+    }
+}
+
+var screen = Rectangle(width: 320, height: 480) {
+    didSet {
+        print("Screen changed! \(screen)")
+    }
+}
+
+screen.origin.x = 10
+
+
+extension Point {
+    static func +(lhs: Point, rhs: Point) -> Point {
+        return Point(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+    }
+}
+
+screen.origin + Point(x: 10, y: 10)
+
+extension Rectangle {
+    mutating func translate(by offset: Point) {
+        origin = origin + offset
+    }
+    
+    func translated(by offset: Point) -> Rectangle {
+        var copy = self
+        copy.translate(by: offset)
+        return copy
+    }
+}
+
+screen.translate(by: Point(x: 10, y: 10))
+
+
+
+
+
+
+
 

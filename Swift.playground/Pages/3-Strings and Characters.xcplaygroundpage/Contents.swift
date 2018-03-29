@@ -30,9 +30,9 @@ word += "\u{301}"
 
 let greeting = "Guten Tag"
 greeting[greeting.startIndex]
-greeting[greeting.characters.index(before: greeting.endIndex)]
-greeting[greeting.characters.index(after: greeting.startIndex)]
-let index = greeting.characters.index(greeting.startIndex, offsetBy: 7)
+greeting[greeting.index(before: greeting.endIndex)]
+greeting[greeting.index(after: greeting.startIndex)]
+let index = greeting.index(greeting.startIndex, offsetBy: 7)
 greeting[index]
 
 var welcome = "hello"

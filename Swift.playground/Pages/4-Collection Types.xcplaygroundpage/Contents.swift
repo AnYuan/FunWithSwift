@@ -195,8 +195,8 @@ for (airportCode, airportName) in airports {
 //Useful extension for Dictionary
 //merge two dics
 extension Dictionary {
-    mutating func merge<S: Sequence
-        where S.Iterator.Element == (Key,Value)>(_ other: S) {
+    mutating func merge<S: Sequence>(_ other: S)
+        where S.Iterator.Element == (Key,Value) {
             for (k,v) in other {
                 self[k] = v
             }
@@ -205,8 +205,8 @@ extension Dictionary {
 
 //init with (key,value)
 extension Dictionary {
-    init<S: Sequence
-        where S.Iterator.Element == (Key,Value)>(_ sequence: S) {
+    init<S: Sequence>(_ sequence: S)
+        where S.Iterator.Element == (Key,Value) {
             self = [:]
             self.merge(sequence)
     }
@@ -220,7 +220,9 @@ alarmsDictionary
 extension Dictionary {
     func mapValues<NewValue>(_ transform: (Value) -> NewValue)
         -> [Key:NewValue] {
-            return Dictionary<Key, NewValue>(map { (key,value) in
+            return Dictionary<Key, NewValue>(map { (arg) -> result in
+                
+                let (key, value) = arg
                 return (key, transform(value))
                 })
     }

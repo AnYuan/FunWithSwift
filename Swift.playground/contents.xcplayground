@@ -35,5 +35,7 @@
         <page name='31-Strings'/>
         <page name='32-Error Handling'/>
         <page name='33-Generics'/>
+        <page name='Struct References'/>
+        <page name='Built-In Collections'/>
     </pages>
 </playground>

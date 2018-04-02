@@ -38,5 +38,7 @@
         <page name='Struct References'/>
         <page name='Built-In Collections'/>
         <page name='Collection Protocols'/>
+        <page name='Optional'/>
+        <page name='Structs and Classes'/>
     </pages>
 </playground>

@@ -176,3 +176,36 @@ example(of: "Conforming list to sequence") {
     list.flatMap {Int($0)}
     list.elementsEqual(["1","2","3"])
 }
+
+
+//Collections
+
+//A type that can 'enqueue' and 'dequeue' elements
+protocol Queue {
+    associatedtype Element
+    mutating func enqueue(_ newElement:Element)
+    mutating func dequeue() -> Element?
+}
+
+struct FIFOQueue<Element>:Queue {
+    private var left:[Element] = []
+    private var right:[Element] = []
+    
+    mutating func enqueue(_ newElement: Element) {
+        right.append(newElement)
+    }
+    
+    mutating func dequeue() -> Element? {
+        if left.isEmpty {
+            left = right.reversed()
+            right.removeAll()
+        }
+        return left.popLast()
+    }
+}
+
+//protocol Collection: Sequence { }
+//extension FIFOQueue:Collection {
+//
+//}
+

@@ -10,7 +10,7 @@ let json = """
 }
 """.data(using: .utf8)!
 
-struct Plane: Decodable {
+struct Plane: Codable {
     var manufacturer: String
     var model: String
     var seats: Int
@@ -21,11 +21,20 @@ struct Plane: Decodable {
         case seats
     }
     
+    //Decodable
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.manufacturer = try container.decode(String.self, forKey: .manufacturer)
         self.model = try container.decode(String.self, forKey: .model)
         self.seats = try container.decode(Int.self, forKey: .seats)
+    }
+    
+    //Encodable
+    func encode(to encoder: Encoder) throws {
+        var container = try encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.manufacturer, forKey: .manufacturer)
+        try container.encode(self.model, forKey: .model)
+        try container.encode(self.seats, forKey: .seats)
     }
 }
 
@@ -35,4 +44,8 @@ print(plane.manufacturer)
 print(plane.model)
 print(plane.seats)
 
+
+let encoder = JSONEncoder()
+let reencodedJSON = try! encoder.encode(plane)
+print(String(data: reencodedJSON, encoding: .utf8)!)
 

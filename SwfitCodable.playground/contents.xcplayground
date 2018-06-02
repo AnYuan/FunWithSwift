@@ -4,5 +4,6 @@
         <page name='1. First Flight'/>
         <page name='2. Holding Patterns'/>
         <page name='3.Taking the Controls'/>
+        <page name='4.Building a Music Store App with iTunes Search API'/>
     </pages>
 </playground>

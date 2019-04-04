@@ -41,5 +41,6 @@
         <page name='Optional'/>
         <page name='Structs and Classes'/>
         <page name='Encoding and Decoding'/>
+        <page name='Mirror'/>
     </pages>
 </playground>

@@ -368,6 +368,7 @@ example(of: "CustomDebugStringConvertible") {
 extension FlightCode: LosslessStringConvertible {
     public init?(_ description: String) {
         let components = description.split(separator: " ")
+        print(components)
         guard components.count == 2,
             let airlineCode = components.first,
             let number = components.last,
@@ -445,16 +446,16 @@ example(of: "UnicodeLogger") {
 //ExpressibleByUnicodeScalarLiteral & ExpressibleByExtendedGraphemeClusterLiteral &
 //ExpressibleByStringLiteral
 example(of: "example") {
-    //    //ExpressibleByUnicodeScalarLiteral
-    //    let unicodeScalar: Unicode.Scalar = "A"
-    //
-    //    //ExpressibleByExtendedGraphemeClusterLiteral
-    //    let character: Character = "A"
-    //
-    //    //ExpressibleByStringLiteral
-    //    let string: String = "A"
-    //
-    //    "A" is String
+    //ExpressibleByUnicodeScalarLiteral
+    let unicodeScalar: Unicode.Scalar = "A"
+
+    //ExpressibleByExtendedGraphemeClusterLiteral
+    let character: Character = "A"
+
+    //ExpressibleByStringLiteral
+    let string: String = "A"
+
+    "A" is String
 }
 
 public enum BookingCode: String {
@@ -485,7 +486,7 @@ example(of: "ExpressibleByStringLiteral") {
     // After
     ("J" as BookingCode)
     
-    let nowBoarding: Set<BookingCode> = ["F", "J"]
+    let _: Set<BookingCode> = ["F", "J"]
 }
 
 enum Style {
@@ -634,13 +635,14 @@ extension StyledString: ExpressibleByStringLiteral {
         self.init(value)
     }
     
-    init(extendedGraphemeClusterLiteral value: String) {
-        self.init(stringLiteral: value)
-    }
-    
-    init(unicodeScalarLiteral value: String) {
-        self.init(stringLiteral: value)
-    }
+//
+//    init(extendedGraphemeClusterLiteral value: String) {
+//        self.init(stringLiteral: value)
+//    }
+//
+//    init(unicodeScalarLiteral value: String) {
+//        self.init(stringLiteral: value)
+//    }
 }
 
 extension StyledString: ExpressibleByStringInterpolation {

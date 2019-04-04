@@ -42,5 +42,10 @@
         <page name='Structs and Classes'/>
         <page name='Encoding and Decoding'/>
         <page name='Mirror'/>
+        <page name='Lazy'/>
+        <page name='Dynamic member lookup'/>
+        <page name='Pattern matching'/>
+        <page name='Codable'/>
+        <page name='Type vs. Self'/>
     </pages>
 </playground>

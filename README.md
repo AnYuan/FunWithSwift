@@ -9,6 +9,8 @@ To do or not to do...
 	* [String index](#string-index)
 	* [Empty string](#empty-string)
 	* [String's sequence methods](#string's-sequence-methods)
+* [Collection](#collection)
+	* [Array vs. ContiguousArray](#array-vs-contiguousarray)
 
 ## General
 
@@ -85,3 +87,18 @@ func enumerated()
 
 ```
 
+## Collection
+
+### Array vs. ContiguousArray
+
+If you array's Element type is a class or @objc protocol and you do not need
+to bridge the array to NSArray or pass the array to Objective-C APIs
+
+**Preferred**:
+
+```swift
+struct ContiguousArray<Element>
+```
+
+If the array's Element type is a struct or enumeration, ```Array``` and ```ContiguousArray```
+should have similar efficiency.

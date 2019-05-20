@@ -11,6 +11,10 @@ To do or not to do...
 	* [String's sequence methods](#string's-sequence-methods)
 * [Collection](#collection)
 	* [Array vs. ContiguousArray](#array-vs-contiguousarray)
+* [UI](#ui)
+	* [layoutSubviews](#layoutSubviews)
+	* [loadView](#loadView)
+	* [viewDidLoad and Friends](#viewDidLoad-and-friends)
 
 ## General
 
@@ -102,3 +106,60 @@ struct ContiguousArray<Element>
 
 If the array's Element type is a struct or enumeration, ```Array``` and ```ContiguousArray```
 should have similar efficiency.
+
+## UI
+
+### layoutSubviews
+
+You **NEVER** call ``` layoutSubviews``` yourself.
+
+**Not Preferred**:
+
+call ``` layoutSubviews() ``` in your code.
+
+**Preferred**:
+
+Tell ```UIKit``` our layout needs updating with ```setNeedsLayout()``` and
+it calls our ```layoutSubviews``` during the next update cycle.
+
+### loadView
+
+A newly created view controller doesn't load its view right away, so the view property is ```nil``` by default.
+If you access the view when it's ```nil``` the view controller calls the aptly named ```loadView()``` method to load the view.
+This "lazy loading" of the view means it's only loaded when needed.
+
+**Not Preferred**:
+
+call ``` loadView() ``` in your code.
+
+**Preferred**:
+
+If you want to force the loading of the view call ```loadViewIfNeeded()```
+
+
+Override ```loadView()``` method,
+
+**Not Preferred**:
+
+Don't override ```loadView()``` if you are using Interface Builder to create the view.
+
+**Preferred**:
+
+If you do override ```loadView()``` **DO NOT** call ```super```.
+
+
+### viewDidLoad and Friends
+
+* ```viewDidLoad```: Called after the view controller has loaded its view but not yet added it to the view hierarchy. Called only once in the life of the view controller.
+
+* ```viewWillAppear```: Called when the view controller's view is about to be added to the view hierarchy. Unlike ```viewDidLoad``` this method can be called multiple times in the life of a view controller.
+
+* ```viewDidAppear```: Called after view controller's view is added to the view hierarchy and displayed on-screen. Like ```viewWillAppear``` this method can be called multiple times and has a corresponding method.
+
+**Not Preferred**:
+
+Assume the size of views are correctly set in the ```viewDidLoad``` and ```viewWillAppear``` methods.
+
+**Preferred**:
+
+Use ```viewWillLayoutSubviews``` and ```viewDidLayoutSubviews``` to manually layout views.

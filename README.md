@@ -5,12 +5,14 @@ To do or not to do...
 ## Table of Contents
 * [General](#general)
 	* [Optional, Void, Never](#optional-void-never)
+	* [Enum](#enum)
 * [Optional](#optional)
 	* [Equating Optionals](#equating-optionals)
 	* [Implicitly Unwrapped Optionals](#implicitly-unwrapped-optionals)
 * [Function](#function)
 	* [Overview](#overview)
 	* [Lazy Stored Properties](#lazy-stored-properties)
+	* [The @escaping Annotation](#the-@escaping-annotation)
 * [String](#string)
 	* [String index](#string-index)
 	* [Empty string](#empty-string)
@@ -26,24 +28,21 @@ To do or not to do...
 
 ## General
 
-### Implicitly Unwrapped Optionals
-Why on earth would you use them?
-
-* Reason 1:
-
-	Temporarily, because you are calling Objective-C code that hasn't been audited for nullability.
-	
-* Reason 2:
-
-	Because a value is **nil** very briefly, for a well-defined period of time, and is then never **nil** again. For example, if you have a two-phase initialization, then by the time your class is ready to use, the implicitly wrapped optionals will all have a value.
-	
-	This is the reason Xcode/Interface Builder uses them in the view controller lifecycle: in cocoa and cocoa touch, view controllers create their view lazily, so their exists a time window - after a view controller has been initialized but before it has loaded its view - when the view objects its outlets reference have not been created.
-
 ### Optional, Void, Never
 
 Optional - absence of a thing (nil)
 Void - presence of nothing
 Never - thing which cannot be
+
+### Enum
+
+Enums are value types
+
+* Enums can have methods, computed properties, and subscripts.
+* Methods can be declared mutating or non-mutating.
+* You can write extensions for enums.
+* Enums can conform to protocols.
+* Enums cannot have sorted properties.
 
 ## Optinoal
 
@@ -59,6 +58,19 @@ if regex.first == "^" { // Match only the start of the string. }
 ```swift
 if !regex.isEmpty && regex[regex.startIndex] == "^" { }
 ```
+
+### Implicitly Unwrapped Optionals
+Why on earth would you use them?
+
+* Reason 1:
+
+	Temporarily, because you are calling Objective-C code that hasn't been audited for nullability.
+	
+* Reason 2:
+
+	Because a value is **nil** very briefly, for a well-defined period of time, and is then never **nil** again. For example, if you have a two-phase initialization, then by the time your class is ready to use, the implicitly wrapped optionals will all have a value.
+	
+	This is the reason Xcode/Interface Builder uses them in the view controller lifecycle: in cocoa and cocoa touch, view controllers create their view lazily, so their exists a time window - after a view controller has been initialized but before it has loaded its view - when the view objects its outlets reference have not been created.
 
 ## Function
 
@@ -97,6 +109,17 @@ Accessing a lazy property is a mutating operation because the property's initial
 
 Additionally, be aware that the ```lazy``` keyword doesn't perform any thread synchronization. If multiple threads access a lazy property at the same time before the value has been computed, it's possible the computation could be performed more than once, along with any side effects the computation may have.
 
+### The @escaping Annotation
+
+If a closure is stored somewhere to be called later, it is said to be **escaping**. Conversely, closures that never leave a function's local scope are **non-escaping**. With **escaping** closures, the compiler forces us to be explicit about using **self** in closure expressions, because unintentionally capturing **self** strongly is one of the most frequent causes of reference cycles. A non-escaping closure can't create a permanent reference cycle because it's automatically destroyed when the function it's defined in returns.
+
+Closure arguments are non-escaping by default.
+
+```swift
+func sortDescriptor<Root, Value>(key: @escaping (Root) -> Value, by areInIncreasingOrder: @escapiong(Value, Value) -> Bool) -> SortDescriptor<Root> {
+//something here
+}
+```
 
 ## String
 

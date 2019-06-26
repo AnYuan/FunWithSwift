@@ -6,6 +6,7 @@ To do or not to do...
 * [General](#general)
 	* [Optional, Void, Never](#optional-void-never)
 	* [Enum](#enum)
+	* [@unknown default](#@unknown-default)
 * [Optional](#optional)
 	* [Equating Optionals](#equating-optionals)
 	* [Implicitly Unwrapped Optionals](#implicitly-unwrapped-optionals)
@@ -43,6 +44,19 @@ Enums are value types
 * You can write extensions for enums.
 * Enums can conform to protocols.
 * Enums cannot have sorted properties.
+
+
+### @unknown default
+
+```swift
+switch error {
+  case .dataCorrupted: ...
+  @unknown default:
+  // Handle unknown cases.
+}
+```
+
+```@unknown default``` behaves like normal default clause at runtime, but it's also a signal to the compiler that the default case is only meant to handle enum cases that are unknown at compile time. If the default case matches a case that's known at compile time, we'll still get a warning. This means we can still benefit from exhaustiveness checking when we recompile our program in the future against a newer library interface. If a case got added to the library API since the last update, we'll get warnings to update all our switch statements to explicitly handle the new case. @unknown default gives you the best of both worlds: compile-time exhaustiveness checking, and runtime safety.
 
 ## Optinoal
 

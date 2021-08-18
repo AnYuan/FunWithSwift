@@ -47,5 +47,7 @@
         <page name='Pattern matching'/>
         <page name='Codable'/>
         <page name='Type vs. Self'/>
+        <page name='KeyPath'/>
+        <page name='DSL_HTML'/>
     </pages>
 </playground>

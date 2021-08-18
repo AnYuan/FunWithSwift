@@ -180,16 +180,17 @@ if let y5 = g() {
 
 
 class Person: NSObject {
-    dynamic var firstName: String = ""
+    @objc dynamic var firstName: String = ""
     dynamic var lastName: String = ""
     dynamic var friends: [Person] = []
-    dynamic var bestFriend: Person?
+    @objc dynamic var bestFriend: Person?
     
     init(firstName: String, lastName: String) {
         self.firstName = firstName
         self.lastName = lastName
     }
 }
+
 
 let firstNameGetter = #selector(getter: Person.firstName)
 let firstNameSetter = #selector(setter: Person.firstName)
